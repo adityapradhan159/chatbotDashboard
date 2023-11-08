@@ -16,13 +16,13 @@ const ChatListItems = ({
   const userSelected = useSelector((state) => state.SelectedUser);
 
   console.log(userSelected, "selected user");
-  const { data } = useSeleteduserChatQuery(userSelected);
+  const { data } = useSeleteduserChatQuery(userSelected,{refetchOnMountOrArgChange:true});
   const dispatch = useDispatch();
   console.log(data, "Mynul");
   console.log(userSelected, "selected one");
   useEffect(() => {
     setSelectedUserMessages(data);
-  }, [data]);
+  }, [data,userSelected]);
   const selectChat = (e) => {
     setSelectedUserMessages(data);
     setSelectedUser(user);

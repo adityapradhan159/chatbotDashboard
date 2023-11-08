@@ -10,7 +10,9 @@ const ChatItem = ({ user, msg, image }) => {
           style={{ animationDelay: `0.8s`, justifyContent: "flex-start" }}
           className={`chat__item ${user ? user : ""}`}
         >
-          <Avatar isOnline="active" image={image} />
+          <Avatar 
+          // isOnline="active" 
+          image={image} />
 
           <div className="chat__item__content">
             {typeof msg.message === "object" ? (
@@ -40,7 +42,9 @@ const ChatItem = ({ user, msg, image }) => {
             </div>
           </div>
 
-          <Avatar isOnline="active" image={image} />
+          <Avatar 
+          // isOnline="active"
+           image={image} />
         </div>
       )}
     </>

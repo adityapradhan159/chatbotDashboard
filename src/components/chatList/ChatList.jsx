@@ -3,14 +3,11 @@ import { useEffect, useState } from "react";
 import "./chatList.css";
 import ChatListItems from "./ChatListItems";
 import axios from "axios";
-import { useGetWhatsAppPhoneNumbersQuery } from "../../redux/Features/PhonNumberApi";
 
 // eslint-disable-next-line no-unused-vars
 const ChatList = ({
   setSelectedUserMessages,
-  getAllchats,
   setSelectedUser,
-  users,
   FetchAllMessages,
 }) => {
   const [allChatUsers, setAllChatUsers] = useState([]);
@@ -33,7 +30,6 @@ const ChatList = ({
     <div className="main__chatlist">
       <div className="chatlist__heading">
         <h2>Chats</h2>
-        <button onClick={() => getAllchats()}>getAllchats</button>
         <button className="btn-nobg">
           <i className="fa fa-ellipsis-h"></i>
         </button>
@@ -59,8 +55,8 @@ const ChatList = ({
                 FetchAllMessages={FetchAllMessages}
                 key={index}
                 animationDelay={index + 1}
-                active={"active"}
-                isOnline={"active"}
+                // active={"active"}
+                // isOnline={"active"}
                 image="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTA78Na63ws7B7EAWYgTr9BxhX_Z8oLa1nvOA&usqp=CAU"
               />
             );
