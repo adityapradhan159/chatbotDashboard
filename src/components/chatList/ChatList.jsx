@@ -14,12 +14,6 @@ const ChatList = ({
   FetchAllMessages,
 }) => {
   const [allChatUsers, setAllChatUsers] = useState([]);
-  const { data: PhoneNumbers } = useGetWhatsAppPhoneNumbersQuery({
-    whatsappBusinessAccountId: 154094001125067,
-    accessToken:
-      "EAALnGTlph40BOyoyZAuRn0HI1GGR8dYgIHzlgnqFrJ7bEufufzOqWlUFeHjHHKZCBDkzg2vawR7xgRhkQNhTOH0KZAPbZBVum3nhSzNu8ES9Wx6sMdco3sLXLjaCeR3df0ldncTaNXh3a3601S6d13Xd81oIGFubAcAk7rs1UlQzPChZBnSgmfyWbD874ZA4W8HIuFMobJucRMfUZBXW3kZD",
-  });
-  console.log("PhoneNumbers", PhoneNumbers);
   useEffect(() => {
     axios
       .get("https://knowing-cottony-metal.glitch.me/api/customer")

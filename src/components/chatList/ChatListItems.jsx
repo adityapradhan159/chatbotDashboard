@@ -26,7 +26,6 @@ const ChatListItems = ({
   const selectChat = (e) => {
     setSelectedUserMessages(data);
     setSelectedUser(user);
-    console.log(PhoneNumbers,"PhoneNumbers")
     dispatch(setSelectedUsers(user));
     console.log(user, "user");
 
