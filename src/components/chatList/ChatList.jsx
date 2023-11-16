@@ -12,6 +12,7 @@ const ChatList = ({
 }) => {
   const [allChatUsers, setAllChatUsers] = useState([]);
   useEffect(() => {
+    const whatsAppBusinessAccountId = localStorage.getItem("whatsAppBusinessAccountId")
     axios
       .get("https://knowing-cottony-metal.glitch.me/api/customer")
       .then((response) => {

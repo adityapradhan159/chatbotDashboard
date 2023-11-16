@@ -2,10 +2,11 @@ import "./App.css";
 import Nav from "./components/nav/Nav";
 import ChatBody from "./components/chatBody/ChatBody";
 import { io } from "socket.io-client";
-
+import {BrowserRouter as Router, Routes, Route} from "react-router-dom"
 import { useEffect, useState } from "react";
 import { Provider } from "react-redux";
 import store from "./redux/store";
+import LoginRegistration from "./components/LoginRegistration/LoginRegistration";
 function App() {
   const [messages, setMessages] = useState([]);
   const [AllChats, setAllChats] = useState([]);
@@ -63,8 +64,11 @@ function App() {
   console.log("hello world :o");
 
   return (
-    <Provider store={store}>
-      <div className="__main">
+
+    <Router>
+      <Routes>
+        <Route path="/" element={<LoginRegistration/>}/>
+        <Route path="/dashboard" element={<div className="__main">
         {messages &&
           messages.map((itm, index) => {
             return <div key={index}>{itm.body}</div>;
@@ -80,8 +84,12 @@ function App() {
           setSelectedUser={setSelectedUser}
           FetchAllMessages={FetchAllMessages}
         />
-      </div>
-    </Provider>
+      </div>}/>
+      </Routes>
+    </Router>
+    
+      
+    
   );
 }
 

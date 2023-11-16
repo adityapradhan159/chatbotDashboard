@@ -1,0 +1,58 @@
+.LoginRegistration{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.LoginRegistration-container{
+    width: 40%;
+    background-color: white;
+    padding: 20px;
+}
+
+
+.login-Container{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login-Container h2{
+    text-align: center;
+}
+
+
+.input-container{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.input-container label{
+    color: black !important;
+}
+
+.input-container input{
+    padding: 8px 20px;
+    border: 1px solid rgb(187, 186, 186);
+    border-radius: 6px;
+    background-color: white;
+    color: black;
+}
+
+
+.LoginRegistration button{
+    background-color: blue;
+    color: white;
+    margin-top: 10px;
+}
+
+.LoginRegistration-container span{
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    cursor: pointer;
+}
