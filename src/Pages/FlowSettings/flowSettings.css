@@ -1,0 +1,9 @@
+.Dashboard{
+    width: 100%;
+    display: flex;  
+}
+
+.flowDiagram{
+    width: 90%;
+    height: 100vh;
+}

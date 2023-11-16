@@ -7,6 +7,10 @@ import { useEffect, useState } from "react";
 import { Provider } from "react-redux";
 import store from "./redux/store";
 import LoginRegistration from "./components/LoginRegistration/LoginRegistration";
+import 'reactflow/dist/style.css';
+import FlowSettings from "./Pages/FlowSettings/FlowSettings";
+
+
 function App() {
   const [messages, setMessages] = useState([]);
   const [AllChats, setAllChats] = useState([]);
@@ -68,6 +72,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<LoginRegistration/>}/>
+        <Route path="/settings" element={<FlowSettings/>}/>
         <Route path="/dashboard" element={<div className="__main">
         {messages &&
           messages.map((itm, index) => {

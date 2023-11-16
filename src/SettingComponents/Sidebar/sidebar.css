@@ -1,0 +1,17 @@
+.Sidebar{
+    width: 20%;
+    height: 100vh;
+    border-right: 1px solid rgb(235, 235, 235);
+    padding: 20px;
+}
+
+.Sidebar button{
+
+    width: 100%;
+    padding: 12px 20px;
+    border: none;
+    background: blue;
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+}  
