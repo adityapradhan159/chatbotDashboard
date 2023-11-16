@@ -1,8 +1,11 @@
 import React, { useState } from 'react'
 import "./loginREgistration.css"
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 const LoginRegistration = () => {
+
+  const navigate = useNavigate()
 
   const [showLoginForm,setShowloginForm] = useState(true)
   const [name,setName] = useState("")
@@ -21,6 +24,7 @@ const LoginRegistration = () => {
       .then((res) => {
         console.log(res)
         localStorage.setItem("whatsAppBusinessAccountId",res.data.whatsAppBusinessAccountId)
+        navigate("/dashboard")
       })
       .catch((err) => {
         console.log(err)
