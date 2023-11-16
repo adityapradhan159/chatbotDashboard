@@ -1,12 +1,27 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Handle, Position } from "reactflow";
 import "./nodeType.css";
 
 const NodeType = ({id, isConnectable, data, onChange, setNodes}) => {
   const handleStyle = { left: 10, background: "#555" };
   const [messages, setMessages] = useState([
-    { id: 1, type: "text", content: "" },
+    { id: 1, type: "text", content: "", nodeId:id },
   ]);
+
+
+  useEffect(() => {
+
+    if(data && data.text){
+      const storedMessages = data && data?.text.map((message) =>
+      message.id === id
+        ? { ...message, content: message.content }
+        : message
+      );
+      setMessages(storedMessages)
+    }
+    
+  }, [])
+  
 
   // console.log("Id",id)
 
@@ -121,6 +136,11 @@ const NodeType = ({id, isConnectable, data, onChange, setNodes}) => {
           Add Select Options
         </button>
       </div>
+      <Handle
+        type="source"
+        position={Position.Bottom}
+        isConnectable={isConnectable}
+      />
 
       {/* Single Handle for the entire component */}
       {/* <Handle

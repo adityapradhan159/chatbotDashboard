@@ -100,6 +100,11 @@ const LoginRegistration = () => {
               </div>
 
               <div className="input-container">
+                <label htmlFor="">Access Token</label>
+                <input type="text" value={accessToken} onChange={(e)=>setAccessToken(e.target.value)}/>
+              </div>
+
+              <div className="input-container">
                 <label htmlFor="">Password</label>
                 <input type="text" value={password} onChange={(e)=>setPassword(e.target.value)}/>
               </div>
