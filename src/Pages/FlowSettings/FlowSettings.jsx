@@ -35,7 +35,7 @@ const FlowSettings = () => {
 
       const whatsAppBusinessAccountId = localStorage.getItem("whatsAppBusinessAccountId")
 
-      axios.put("https://tudoorg.glitch.me/api/chatFlow",{...flow,"whatsAppBusinessAccountId":whatsAppBusinessAccountId})
+      axios.put(`https://tudoorg.glitch.me/api/chatFlow?whatsAppBusinessAccountId=${whatsAppBusinessAccountId}`,{...flow,"whatsAppBusinessAccountId":whatsAppBusinessAccountId})
       .then((res) => {
         console.log(res)
         alert("Flow Saved..")

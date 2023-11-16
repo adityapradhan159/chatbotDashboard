@@ -18,7 +18,7 @@ export default class UserProfile extends Component {
         </div>
         <div className="profile__card">
           <div className="card__header" onClick={this.toggleInfo}>
-            <h4>Information</h4>
+            <h4>Flow Setting</h4>
             <AiFillCaretDown/>
           </div>
           <div className="card__content">
