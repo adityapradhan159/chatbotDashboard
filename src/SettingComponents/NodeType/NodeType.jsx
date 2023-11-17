@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Handle, Position } from "reactflow";
 import "./nodeType.css";
+import { IoCloseCircle } from "react-icons/io5";
 
 const NodeType = ({id, isConnectable, data, onChange, setNodes}) => {
   const handleStyle = { left: 10, background: "#555" };
@@ -48,9 +49,20 @@ const NodeType = ({id, isConnectable, data, onChange, setNodes}) => {
       id: messages.length + 1,
       type: "button",
       content: "",
+      nodeId:id
     };
     setMessages([...messages, newButton]);
   };
+
+
+  const handleDeleteButton = (id) => {
+    const newMessages = data.text.filter((el) => {
+      return el.id !== id
+    })
+    data.text = newMessages
+    console.log("New Messages",newMessages)
+    setMessages(newMessages)
+  }
 
   // console.log("Messages",messages)
 
@@ -62,7 +74,7 @@ const NodeType = ({id, isConnectable, data, onChange, setNodes}) => {
         isConnectable={isConnectable}
       />
       <div>
-        {messages.map((message) => (
+        {messages.map((message,id) => (
           <div key={message.id}>
             {message.type === "text" ? (
               <div>
@@ -90,8 +102,14 @@ const NodeType = ({id, isConnectable, data, onChange, setNodes}) => {
                   textAlign: "center",
                   padding: "10px 0px 10px 0px",
                   display: "flex",
+                  alignItems:"center",
+                  gap:"5px"
                 }}
               >
+                <IoCloseCircle
+                onClick={()=>handleDeleteButton(message.id)}
+                style={{cursor:"pointer"}}
+                />
                 <input
                   style={{
                     textAlign: "center",

@@ -5,6 +5,12 @@
     padding: 20px;
 }
 
+.Sidebar span{
+    display: block;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
 .Sidebar button{
 
     width: 100%;
