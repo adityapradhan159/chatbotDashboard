@@ -49,9 +49,11 @@ const NodeType = ({id, isConnectable, data, onChange, setNodes}) => {
       id: messages.length + 1,
       type: "button",
       content: "",
-      nodeId:id
+      nodeId:id,
+      sourceHandle:`handle${messages.length + 1}`
     };
     setMessages([...messages, newButton]);
+    // data.text = [...messages,newButton]
   };
 
 
