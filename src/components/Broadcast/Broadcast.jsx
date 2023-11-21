@@ -48,7 +48,8 @@ const Broadcast = () => {
     const allUserIds = users.map((user) => user._id);
 
     // Update the customers array with all users
-    setCustomers(users);
+    setCustomers([users]);
+    console.log(users)
 
     // Check all checkboxes by updating the agreement state
     setAgreement(true);
@@ -56,6 +57,9 @@ const Broadcast = () => {
     allUserIds.forEach((id) => {
       handleChange({ target: { checked: true } }, id);
     });
+
+
+    setShowUserList(false)
   };
 
 
@@ -71,7 +75,15 @@ const Broadcast = () => {
     console.log("Selected Customers",customers)
     setMsg("")
 
-    {
+    if(customers.length == 0){
+      alert("Select users to send message")
+    }
+
+    else if(!msg || msg.length == 0){
+      alert("Enter some message!..")
+    }
+
+    else{
       customers && customers.map((item) => {
         axios({
           method: "POST", // Required, HTTP method, a string, e.g. POST, GET
@@ -108,11 +120,26 @@ const Broadcast = () => {
 
   }
 
+
+  const handleCheck = (id) => {
+    console.log(id)
+    const selectedUser = customers.find((user) => user._id === id);
+    console.log(selectedUser)
+    if(selectedUser){
+      return true
+    }
+    else{
+      return false
+    }
+  }
+
   return (
     <div className='Broadcast'>
       <h2>Broadcast</h2>
 
       <div className="user-list-input">
+
+        <div className="dropdown-container">
 
         {
           showUserList == true && 
@@ -128,7 +155,7 @@ const Broadcast = () => {
                   <div className="customer-list-container">
                     <Avatar image={"http://placehold.co/80x80"}  />
                     <h3>{item.name}</h3>
-                    <input type="checkbox" name='agreement' onChange={(e)=>handleChange(e,item._id)}/>
+                    <input type="checkbox" checked={handleCheck(item._id)} name='agreement' onChange={(e)=>handleChange(e,item._id)}/>
                   </div>
                 ))
               }
@@ -137,19 +164,49 @@ const Broadcast = () => {
           </div>
         }
 
+        </div>
+
         
 
         <button onClick={handleUserList}>
           Send To
           <RiArrowDropDownLine />
+
+          {/* {
+          showUserList == true && 
+
+          <div className="userListDropDown">
+            <div className="selectAll-btn">
+              <button onClick={handleSelectAll}>Select All</button>
+            </div>
+            
+            <div className="cutomer-list">
+              {
+                users && users.map((item) => (
+                  <div className="customer-list-container">
+                    <Avatar image={"http://placehold.co/80x80"}  />
+                    <h3>{item.name}</h3>
+                    <input type="checkbox" checked={handleCheck(item._id)} name='agreement' onChange={(e)=>handleChange(e,item._id)}/>
+                  </div>
+                ))
+              }
+            </div>
+
+          </div>
+        } */}
+
+
         </button>
         <p>:</p>
 
         {
           customers && customers.map((item) => (
+            item.name ?
             <div className="selectedCustomers">
                 <p>{item.name}</p>
             </div>
+            :
+            <></>
           ))
           
         }

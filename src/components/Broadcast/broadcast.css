@@ -18,8 +18,24 @@
     align-items: center;
     gap: 10px;
     position: relative;
+    flex-wrap: wrap;
     /* padding: 10px; */
     /* background-color: white; */
+}
+
+.dropdown-container{
+    position: relative;
+    height: 50px;
+}
+
+.selectedCustomers{
+    background-color: white;
+    padding: 4px 10px;
+    border-radius: 4px;
+}
+
+.selectedCustomers p{
+    margin: 0px;
 }
 
 
@@ -33,11 +49,12 @@
     color: white;
     border: none;
     outline: none !important; 
+    position: relative;
 }
 
 .userListDropDown{
     position: absolute;
-    top: 100%;
+    top: 110%;
     left: 0px;
     width: 250px;
     /* height: 200px; */
@@ -45,6 +62,8 @@
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
     /* padding: 10px; */
 }
+
+
 
 .selectAll-btn{
     border-bottom: 1px solid rgba(180, 180, 180, 0.548);
@@ -79,6 +98,7 @@
 .customer-list-container h3{
     margin: 0px;
     font-size: 14px;
+    color: black;
 }
 
 .userListDropDown button{
