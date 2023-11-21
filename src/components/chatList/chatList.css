@@ -131,3 +131,14 @@
   width: 100%;
   height: 100%;
 }
+
+.broadcast-btn{
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.broadcast-btn button{
+  width: 100%;
+  background-color: #4665ff;
+  color: white;
+}

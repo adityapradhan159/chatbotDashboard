@@ -64,16 +64,21 @@ const UserProfile = () => {
         <h4>Fernando Faucho</h4>
         <p>CEO & Founder at Highly Inc</p>
       </div>
+
       <div className="profile__card">
         <div className="card__header" onClick={() => navigate("/settings")}>
           <h4>Flow Setting</h4>
-          {/* <AiFillCaretDown/> */}
-        </div>
-        <div className="card__content">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
-          ultrices urna a imperdiet egestas. Donec in magna quis ligula
         </div>
       </div>
+
+      <div className="profile__card">
+        <div className="card__header" onClick={() => navigate("/importCustomers")}>
+          <h4>Import Customers</h4>
+        </div>
+      </div>
+
+
+
     </div>
   );
 }

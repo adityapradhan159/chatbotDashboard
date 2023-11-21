@@ -15,6 +15,7 @@ import FlowSettings from "./Pages/FlowSettings/FlowSettings";
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
+import ImportCustomers from "./components/ImportCustomers/ImportCustomers";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -97,6 +98,7 @@ function App() {
       <Routes>
         <Route path="/" element={<LoginRegistration/>}/>
         <Route path="/settings" element={<FlowSettings/>}/>
+        <Route path="/importCustomers" element={<ImportCustomers/>}/>
         <Route path="/dashboard" element={<div className="__main">
         {messages &&
           messages.map((itm, index) => {

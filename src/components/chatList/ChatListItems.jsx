@@ -4,6 +4,7 @@ import Avatar from "./Avatar";
 import { useSeleteduserChatQuery } from "../../redux/Features/MessageApi";
 import { setSelectedUsers } from "../../redux/Features/SelectedUser.js";
 import { useDispatch, useSelector } from "react-redux";
+import { setShowComponent } from "../../redux/Features/SelectedComponent.js";
 const ChatListItems = ({
   name,
   user,
@@ -24,6 +25,8 @@ const ChatListItems = ({
     setSelectedUserMessages(data);
   }, [data,userSelected]);
   const selectChat = (e) => {
+    dispatch(setShowComponent("chatContent"))
+    
     setSelectedUserMessages(data);
     setSelectedUser(user);
     dispatch(setSelectedUsers(user));
