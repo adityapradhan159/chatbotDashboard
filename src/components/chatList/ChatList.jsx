@@ -14,7 +14,7 @@ const ChatList = ({
   useEffect(() => {
     const whatsAppBusinessAccountId = localStorage.getItem("whatsAppBusinessAccountId")
     axios
-      .get(`https://knowing-cottony-metal.glitch.me/api/customer?whatsAppBusinessAccountId=${whatsAppBusinessAccountId}`)
+      .get(`https://tudoorg.glitch.me/api/customer?whatsAppBusinessAccountId=${whatsAppBusinessAccountId}`)
       .then((response) => {
         setAllChatUsers(response.data);
         console.log(response);

@@ -38,7 +38,7 @@ const analytics = getAnalytics(app);
 function App() {
   const [messages, setMessages] = useState([]);
   const [AllChats, setAllChats] = useState([]);
-  var socket = io("https://knowing-cottony-metal.glitch.me");
+  var socket = io("https://tudoorg.glitch.me");
   const [seletedUser, setSelectedUser] = useState(null);
   const [seletedUserMessages, setSelectedUserMessages] = useState(null);
 

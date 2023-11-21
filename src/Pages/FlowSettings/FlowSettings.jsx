@@ -81,7 +81,7 @@ const FlowSettings = () => {
 
     const whatsAppBusinessAccountId = localStorage.getItem("whatsAppBusinessAccountId")
 
-    axios.get(`https://knowing-cottony-metal.glitch.me/api/chatFlow?whatsAppBusinessAccountId=${whatsAppBusinessAccountId}`)
+    axios.get(`https://tudoorg.glitch.me/api/chatFlow?whatsAppBusinessAccountId=${whatsAppBusinessAccountId}`)
     .then((res) => {
         console.log("Response",res)
         setNodes(res.data[0].nodes)

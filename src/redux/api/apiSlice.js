@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export const api = createApi({
   reducerPath: 'api',
-  baseQuery: fetchBaseQuery({ baseUrl: 'https://knowing-cottony-metal.glitch.me' }),
+  baseQuery: fetchBaseQuery({ baseUrl: 'https://tudoorg.glitch.me' }),
   tagTypes: ['comments'],
   endpoints: () => ({}),
 });

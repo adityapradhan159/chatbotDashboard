@@ -17,7 +17,7 @@ const LoginRegistration = () => {
 
   const handleLoginRegister = (form) => {
     if(form == "login"){
-      axios.post("https://knowing-cottony-metal.glitch.me/api/login",{
+      axios.post("https://tudoorg.glitch.me/api/login",{
         "PhoneNumber":phoneNumber,
         "password":password
       })
@@ -31,7 +31,7 @@ const LoginRegistration = () => {
       })
     }
     else{
-      axios.post("https://knowing-cottony-metal.glitch.me/api/register",{
+      axios.post("https://tudoorg.glitch.me/api/register",{
         "name":name,
         "accesToken":accessToken,
         "PhoneNumberId":phoneId,
