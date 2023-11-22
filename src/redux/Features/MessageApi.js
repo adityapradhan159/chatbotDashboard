@@ -6,7 +6,7 @@ const MessageApi = api.injectEndpoints({
       query: (user) => {
         // Log the 'number' here
         console.log("Number:", user.number);
-        return `api/chat?chatId=${user.number}`;
+        return `api/chat?chatId=${user.number}&whatsAppBusinessAccountId=${localStorage.getItem("whatsAppBusinessAccountId")}`;
       },
       providesTags: ["comments"],
     }),

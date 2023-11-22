@@ -20,7 +20,10 @@ const ChatListItems = ({
   const { data } = useSeleteduserChatQuery(userSelected,{refetchOnMountOrArgChange:true});
   const dispatch = useDispatch();
   console.log(data, "Mynul");
-  console.log(userSelected, "selected one");
+  // console.log(userSelected, "selected one");
+
+
+  
   useEffect(() => {
     setSelectedUserMessages(data);
   }, [data,userSelected]);

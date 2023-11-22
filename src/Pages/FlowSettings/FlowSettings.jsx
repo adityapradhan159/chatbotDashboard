@@ -59,7 +59,9 @@ const FlowSettings = () => {
           id: Math.random().toString(),
           type: "textUpdater",
           position: { x: 100, y: yPos.current },
-          data: {},
+          data: {
+            name:`{Node}`
+          },
         },
       ];
     });

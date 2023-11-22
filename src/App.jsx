@@ -39,7 +39,7 @@ const analytics = getAnalytics(app);
 function App() {
   const [messages, setMessages] = useState([]);
   const [AllChats, setAllChats] = useState([]);
-  var socket = io("https://tudoorg.glitch.me");
+  // var socket = io("https://tudoorg.glitch.me");
   const [seletedUser, setSelectedUser] = useState(null);
   const [seletedUserMessages, setSelectedUserMessages] = useState(null);
 
@@ -58,16 +58,16 @@ function App() {
       }
     };
 
-    // Add the event listener
-    socket.on("message", handleMessage);
-    socket.on("adminmessage", handleMessage);
+    // // Add the event listener
+    // socket.on("message", handleMessage);
+    // socket.on("adminmessage", handleMessage);
 
-    // Clean up the event listener when the component unmounts
-    return () => {
-      socket.off("message", handleMessage);
-      socket.off("adminmessage", handleMessage);
-    };
-  }, [socket]);
+    // // Clean up the event listener when the component unmounts
+    // return () => {
+    //   socket.off("message", handleMessage);
+    //   socket.off("adminmessage", handleMessage);
+    // };
+  }, []);
 
   // Listen for the "qrCode" event from the server
   // socket.on("qrCode", (data) => {

@@ -41,6 +41,7 @@ const ChatContent = ({ seletedUser, seletedUserMessages }) => {
           chatId: userNumber,
           message: message,
           timestamp: timestamp.toISOString(),
+          whatsAppBusinessAccountId: localStorage.getItem("whatsAppBusinessAccountId")
         });
       })
       .catch((error) => {
