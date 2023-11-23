@@ -23,6 +23,8 @@ const LoginRegistration = () => {
       })
       .then((res) => {
         console.log(res)
+        localStorage.setItem("acessToken",res.data.accessToken)
+        localStorage.setItem("PhoneNumberId",res.data.PhoneNumberId)
         localStorage.setItem("whatsAppBusinessAccountId",res.data.whatsAppBusinessAccountId)
         navigate("/dashboard")
       })

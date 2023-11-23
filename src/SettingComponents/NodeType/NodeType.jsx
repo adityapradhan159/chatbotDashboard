@@ -133,7 +133,12 @@ const NodeType = ({id, isConnectable, data, onChange, setNodes}) => {
           <div key={message.id}>
             {message.type === "text" ? (
               <div style={{marginBottom:"10px"}}>
-                <label htmlFor={`message${message.id}`}>Description:</label>
+                {
+                  data.name !== "Http Node" ? 
+                  <label htmlFor={`message${message.id}`}>Description:</label> :
+                  <label htmlFor={`message${message.id}`}>Http Node:</label>
+                }
+                
                 <textarea
                   rows={3}
                   cols={25}

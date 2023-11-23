@@ -68,6 +68,28 @@ const FlowSettings = () => {
   }, []);
 
 
+  const addHttpsNode = useCallback(() => {
+    yPos.current += 100;
+    setNodes((els) => {
+      console.log(els);
+      return [
+        ...els,
+        {
+          id: Math.random().toString(),
+          type: "textUpdater",
+          position: { x: 100, y: yPos.current },
+          data: {
+            name:"Http Node"
+          },
+        },
+      ];
+    });
+  }, []);
+
+
+
+
+
   const initialNodes = [
   ];
   const initialEdges = [];
@@ -120,7 +142,7 @@ const FlowSettings = () => {
   return (
     <ReactFlowProvider>
       <div className="Dashboard">
-        <Sidebar addNode={addNode} onSave={onSave} onc/>
+        <Sidebar addNode={addNode} onSave={onSave} addHttpsNode={addHttpsNode}/>
         <FlowDiagram
           nodeTypes={nodeTypes}
           setNodes={setNodes}
