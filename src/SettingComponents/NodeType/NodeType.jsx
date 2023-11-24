@@ -136,7 +136,7 @@ const NodeType = ({id, isConnectable, data, onChange, setNodes}) => {
                 {
                   data.name !== "Http Node" ? 
                   <label htmlFor={`message${message.id}`}>Description:</label> :
-                  <label htmlFor={`message${message.id}`}>Http Node:</label>
+                  <label htmlFor={`message${message.id}`}>Webhook Node:</label>
                 }
                 
                 <textarea
