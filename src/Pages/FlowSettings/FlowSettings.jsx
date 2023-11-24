@@ -79,7 +79,7 @@ const FlowSettings = () => {
           type: "textUpdater",
           position: { x: 100, y: yPos.current },
           data: {
-            name:"Http Node"
+            name:"Webhook Node"
           },
         },
       ];
