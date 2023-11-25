@@ -14,6 +14,7 @@ const Sidebar = ({ addNode, onSave,addHttpsNode }) => {
       <button onClick={addNode}>Add Node</button>
       <button onClick={addHttpsNode} style={{marginTop:"20px"}}>Add https Node</button>
       <button style={{ marginTop: "10px" }} onClick={onSave}>Save You Flow</button>
+      
     </div>
   );
 };

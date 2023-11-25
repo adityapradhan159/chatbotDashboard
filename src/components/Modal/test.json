@@ -1,0 +1,371 @@
+{
+    "status": "success",
+    "data": [
+      {
+        "docId": "alQusais",
+        "ayClassic": [
+          {
+            "gender": "all",
+            "daysArr": [
+              "Sun",
+              "Mon",
+              "Tue",
+              "Wed",
+              "Thu",
+              "Fri"
+            ],
+            "days": "Sun to Fri",
+            "time": "7:00 AM",
+            "option": "7:00 AM"
+          },
+          {
+            "gender": "all",
+            "days": "Sun to Fri",
+            "daysArr": [
+              "Sun",
+              "Mon",
+              "Tue",
+              "Wed",
+              "Thu",
+              "Fri"
+            ],
+            "time": "7:40 PM",
+            "option": "7:40 PM"
+          }
+        ],
+        "red": [
+          {
+            "gender": "all",
+            "days": "Mon to Fri",
+            "daysArr": [
+              "Mon",
+              "Tue",
+              "Wed",
+              "Thu",
+              "Fri"
+            ],
+            "time": "5:50 AM",
+            "option": "5:50 AM"
+          },
+          {
+            "gender": "all",
+            "daysArr": [
+              "Sun",
+              "Mon",
+              "Tue",
+              "Wed",
+              "Thu",
+              "Fri"
+            ],
+            "days": "Sun to Fri",
+            "time": "8:15 AM",
+            "option": "8:15 AM"
+          },
+          {
+            "gender": "ladies",
+            "daysArr": [
+              "Sun",
+              "Mon",
+              "Tue",
+              "Wed",
+              "Thu",
+              "Fri"
+            ],
+            "days": "Sun to Fri",
+            "time": "4:00 PM",
+            "option": "4:00 PM (Ladies Batch)"
+          },
+          {
+            "gender": "ladies",
+            "days": "Mon to Fri",
+            "daysArr": [
+              "Mon",
+              "Tue",
+              "Wed",
+              "Thu",
+              "Fri"
+            ],
+            "time": "5:15 PM",
+            "option": "5:15 PM (Ladies Batch)"
+          },
+          {
+            "gender": "all",
+            "days": "Sun to Fri",
+            "daysArr": [
+              "Sun",
+              "Mon",
+              "Tue",
+              "Wed",
+              "Thu",
+              "Fri"
+            ],
+            "time": "6:30 PM",
+            "option": "6:30 PM"
+          }
+        ]
+      },
+      {
+        "docId": "burDubai",
+        "ayClassic": [
+          {
+            "gender": "all",
+            "days": "Mon to Fri",
+            "daysArr": [
+              "Mon",
+              "Tue",
+              "Wed",
+              "Thu",
+              "Fri"
+            ],
+            "time": "7:20 AM",
+            "option": "7:20 AM"
+          },
+          {
+            "gender": "all",
+            "days": "Sun to Fri",
+            "daysArr": [
+              "Sun",
+              "Mon",
+              "Tue",
+              "Wed",
+              "Thu",
+              "Fri"
+            ],
+            "time": "5:50 PM",
+            "option": "5:50 PM"
+          }
+        ],
+        "red": [
+          {
+            "gender": "all",
+            "daysArr": [
+              "Mon",
+              "Tue",
+              "Wed",
+              "Thu",
+              "Fri"
+            ],
+            "days": "Mon to Fri",
+            "time": "6:00 AM",
+            "option": "6:00 AM"
+          },
+          {
+            "gender": "all",
+            "days": "Sun to Fri",
+            "daysArr": [
+              "Sun",
+              "Mon",
+              "Tue",
+              "Wed",
+              "Thu",
+              "Fri"
+            ],
+            "time": "8:30 AM",
+            "option": "8:30 AM"
+          },
+          {
+            "gender": "ladies",
+            "daysArr": [
+              "Mon",
+              "Tue",
+              "Wed",
+              "Thu",
+              "Fri"
+            ],
+            "days": "Mon to Fri",
+            "time": "9:45 AM",
+            "option": "9:45 AM (Ladies Batch)"
+          },
+          {
+            "gender": "all",
+            "days": "Sun to Fri",
+            "daysArr": [
+              "Sun",
+              "Mon",
+              "Tue",
+              "Wed",
+              "Thu",
+              "Fri"
+            ],
+            "time": "7:00 PM",
+            "option": "7:00 PM"
+          },
+          {
+            "gender": "all",
+            "days": "Mon to Fri",
+            "daysArr": [
+              "Mon ",
+              "Tue",
+              "Wed",
+              "Thu",
+              "Fri"
+            ],
+            "time": "8:15 PM",
+            "option": "8:15 PM"
+          }
+        ]
+      },
+      {
+        "docId": "emirates",
+        "red": [
+          {
+            "gender": "all",
+            "daysArr": [
+              "Mon",
+              "Tue",
+              "Wed",
+              "Thu",
+              "Fri"
+            ],
+            "days": "Mon to Fri",
+            "time": "6:00 AM",
+            "option": "6:00 AM"
+          },
+          {
+            "gender": "all",
+            "daysArr": [
+              "Sun",
+              "Mon",
+              "Tue",
+              "Wed",
+              "Thu"
+            ],
+            "days": "Sun to Fri",
+            "time": "7:10 AM",
+            "option": "7:10 AM"
+          },
+          {
+            "gender": "all",
+            "daysArr": [
+              "Sun",
+              "Mon",
+              "Tue",
+              "Wed",
+              "Thu"
+            ],
+            "days": "Sun to Thu",
+            "time": "10:30 AM",
+            "option": "10:30 AM"
+          },
+          {
+            "gender": "all",
+            "days": "Thur to Tue",
+            "daysArr": [
+              "Thu",
+              "Fri",
+              "Sat",
+              "Sun",
+              "Mon",
+              "Tue"
+            ],
+            "time": "7:30 PM",
+            "option": "7:30 PM"
+          }
+        ],
+        "ayClassic": [
+          {
+            "gender": "all",
+            "days": "Thu to Tue",
+            "daysArr": [
+              "Thu",
+              "Fri",
+              "Sat",
+              "Sun",
+              "Mon",
+              "Tue"
+            ],
+            "time": "6:15 PM",
+            "option": "6:15 PM"
+          }
+        ]
+      },
+      {
+        "docId": "motorCity",
+        "red": [
+          {
+            "gender": "all",
+            "daysArr": [
+              "Mon",
+              "Tue",
+              "Web",
+              "Thu",
+              "Fri"
+            ],
+            "days": "Mon to Fri",
+            "time": "6:00 AM",
+            "option": "6:00 AM"
+          },
+          {
+            "gender": "all",
+            "days": "Sun to Fri",
+            "daysArr": [
+              "Sun",
+              "Mon",
+              "Tue",
+              "Web",
+              "Thu",
+              "Fri"
+            ],
+            "time": "8:20 AM",
+            "option": "8:20 AM"
+          },
+          {
+            "gender": "ladies",
+            "daysArr": [
+              "Mon",
+              "Tue",
+              "Web",
+              "Thu",
+              "Fri"
+            ],
+            "days": "Mon to Fri",
+            "time": "9:30 AM",
+            "option": "9:30 AM (Ladies Batch)"
+          },
+          {
+            "gender": "all",
+            "days": "Sun to Fri",
+            "daysArr": [
+              "Sun",
+              "Mon",
+              "Tue",
+              "Web",
+              "Thu",
+              "Fri"
+            ],
+            "time": "7:30 PM",
+            "option": "7:30 PM"
+          }
+        ],
+        "ayClassic": [
+          {
+            "gender": "all",
+            "days": "Mon to Fri",
+            "daysArr": [
+              "Mon",
+              "Tue",
+              "Wed",
+              "Thu",
+              "Fri"
+            ],
+            "time": "7:10 AM",
+            "option": "7:10 AM"
+          },
+          {
+            "gender": "all",
+            "days": "Sun to Fri",
+            "daysArr": [
+              "Sun",
+              "Mon",
+              "Tue",
+              "Wed",
+              "Thu"
+            ],
+            "time": "6:15 PM",
+            "option": "6:15 PM"
+          }
+        ]
+      }
+    ]
+  }
+  

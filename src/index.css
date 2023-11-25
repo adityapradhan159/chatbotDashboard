@@ -13,7 +13,10 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 }
-
+::placeholder {
+  color: rgb(201, 201, 201);
+  opacity: 1; /* Firefox */
+}
 a {
   font-weight: 500;
   color: #646cff;
