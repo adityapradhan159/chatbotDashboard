@@ -3,7 +3,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import {JSONPath} from "jsonpath-plus";
+import { JSONPath } from "jsonpath-plus";
 import "../../SettingComponents/NodeType/NodeType.css";
 
 import React, { useState } from "react";
@@ -15,6 +15,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  FormLabel,
   TextField,
   TextareaAutosize,
 } from "@mui/material";
@@ -29,6 +30,8 @@ const Modal = ({
   const [apiResponse, setApiResponse] = useState({});
   const [JsonPath, setJsonPath] = useState("");
   const [CustomVariable, setCustomVariable] = useState("");
+  
+  const [Feilds,setFeilds]=useState([]);
   const HandleResponse = () => {
     axios
       .get(`${api}`)
@@ -38,32 +41,46 @@ const Modal = ({
       .catch((err) => {
         console.log(err);
       });
-    };
-    const HandleExtractData = () => {
-        // if (Object.keys(apiResponse).length === 0) {
-        //   console.log('API response is empty. Make sure to fetch the response first.');
-        //   return;
-        // }
-      
-        try {
-          const data = JSONPath({path: JsonPath,json: apiResponse})
-          console.log('Extracted Data:', data);
-        } catch (error) {
-          console.error('Error extracting data:', error.message);
-        }
-      };
-      
+  };
+  const HandleExtractData = () => {
+    // if (Object.keys(apiResponse).length === 0) {
+    //   console.log('API response is empty. Make sure to fetch the response first.');
+    //   return;
+    // }
 
+    try {
+      const data = JSONPath({ path: JsonPath, json: apiResponse });
+      console.log("Extracted Data:", data);
+      setApiResponse(data)
+      localStorage.setItem(CustomVariable, JSON.stringify(data));
+    } catch (error) {
+      console.error("Error extracting data:", error.message);
+    }
+  };
+const HandleExtractedFeilds=(ExtractedFeilds)=>{
+
+const NewExtractedFeilds=ExtractedFeilds.split(',')
+localStorage.setItem('ExtractedFeilds', JSON.stringify(NewExtractedFeilds));
+
+console.log('Extracted Feilds:',NewExtractedFeilds)
+setFeilds(NewExtractedFeilds)
+}
   return (
     <React.Fragment>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Edit Request</DialogTitle>
         <DialogContent>
-          <div style={{ display: "flex",justifyContent:"center",alignItems:"center" }}>
-              <Select value="Get">
-                <MenuItem value="Get">Get</MenuItem>
-                <MenuItem value="Post">Post</MenuItem>
-              </Select>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Select value="Get">
+              <MenuItem value="Get">Get</MenuItem>
+              <MenuItem value="Post">Post</MenuItem>
+            </Select>
             <textarea
               placeholder="Enter Your Api"
               rows={3}
@@ -139,6 +156,23 @@ const Modal = ({
               }}
               placeholder="Custom Variable"
             />
+            {/* <FormLabel>
+              You Can Add Multiple Feilds with each separate by comma
+            </FormLabel>
+            <input
+              onChange={(evt) => HandleExtractedFeilds(evt.target.value)}
+              className="nodrag "
+              style={{
+                outline: "none",
+                padding: 5,
+                outlineColor: "gray",
+                border: "1px solid #e6e6e6",
+                borderRadius: 5,
+                width: "100%",
+                height: "50px",
+              }}
+              placeholder="Felids to be Extracted (e.g., Days, Time)"
+            /> */}
           </div>
           <button
             onClick={HandleExtractData}

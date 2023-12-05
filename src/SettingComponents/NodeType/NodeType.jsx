@@ -9,12 +9,17 @@ import { MdEditSquare } from "react-icons/md";
 import store from "../../redux/store";
 import axios from "axios";
 import Modal from "../../components/Modal/Modal";
-
+import Autocomplete from "@mui/material/Autocomplete";
+import TextField from "@mui/material/TextField";
 const NodeType = ({ id, isConnectable, data }) => {
+  const [CustomVariable, setCustomVariable] = useState("");
+  const [Data, setData] = useState([]);
+  const [Feilds, setFeilds] = useState([]);
+  const [SelectedFeilds, setSelectedFeilds] = useState([]);
   const [messages, setMessages] = useState([
     { id: 1, type: "text", content: "", nodeId: id },
   ]);
-  const [externalLink,setExternalLink]=useState('')
+  const [externalLink, setExternalLink] = useState("");
   const [listItems, setListItems] = useState([
     { id: 1, type: "text", content: "", nodeId: id },
   ]);
@@ -31,6 +36,18 @@ const NodeType = ({ id, isConnectable, data }) => {
   const handleClose = () => {
     setOpen(false);
   };
+  useEffect(() => {
+    if (CustomVariable) {
+      const data = JSON.parse(localStorage.getItem(CustomVariable)) || null;
+      console.log(data);
+      setData(data);
+      if (data?.length !== 0) {
+        const keys = Object.keys(data[0]);
+        setFeilds(keys);
+        console.log(keys, "keys");
+      }
+    }
+  }, [CustomVariable]);
 
   useEffect(() => {
     if (data && data.text) {
@@ -61,32 +78,23 @@ const NodeType = ({ id, isConnectable, data }) => {
 
     data.text = updatedMessages;
   };
-const HandleExternalLink=(evt)=>{
-  setExternalLink(evt.target.value);
-}
+  const HandleExternalLink = (evt) => {
+    setExternalLink(evt.target.value);
+  };
   const addNewButton = () => {
     setShowActionsPopup(!showActionsPopup);
-
-    // const newButton = {
-    //   id: messages.length + 1,
-    //   type: "button",
-    //   content: "",
-    //   nodeId:id,
-    //   sourceHandle:`handle${messages.length + 1}`
-    // };
-    // setMessages([...messages, newButton]);
   };
 
   const handleDeleteButton = (id) => {
-    const [open, setOpen] = React.useState(false);
+    // const [open, setOpen] = React.useState(false);
 
-    const handleClickOpen = () => {
-      setOpen(true);
-    };
+    // const handleClickOpen = () => {
+    //   setOpen(true);
+    // };
 
-    const handleClose = () => {
-      setOpen(false);
-    };
+    // const handleClose = () => {
+    //   setOpen(false);
+    // };
     const newMessages = data.text.filter((el) => {
       return el.id !== id;
     });
@@ -123,8 +131,24 @@ const HandleExternalLink=(evt)=>{
     setMessages([...messages, newButton]);
   };
 
-
-
+  const ImportLists = () => {
+    console.log(data.text.length,"text length")
+    const NewMessages = Data.map((item,key) => {
+      return {
+        id: data.text.length + key+1,
+        type: "list",
+        content: SelectedFeilds.map((field) => item[field]).join(" "),
+        nodeId: id,
+        sourceHandle: `handle${data.text.length + key+1 + 1}`,
+      };
+    });
+    console.log(NewMessages,'new messages');
+    const UpdatedMessages = [...messages, ...NewMessages];
+    setButtonItems(UpdatedMessages);
+    setListItems(UpdatedMessages);
+    setMessages(UpdatedMessages);
+    data.text=UpdatedMessages // This effect runs after the component has rendered and messages state has been updated
+  };
   return (
     <div className="text-updater-node">
       <Handle
@@ -141,7 +165,7 @@ const HandleExternalLink=(evt)=>{
                   <>
                     <label htmlFor={`message${message.id}`}>Description:</label>
                     <textarea
-                      placeholder="Enter Your Api"
+                      placeholder="Enter Your Description"
                       rows={3}
                       cols={25}
                       style={{
@@ -290,10 +314,10 @@ const HandleExternalLink=(evt)=>{
             <h5>List</h5>
 
             {messages.map(
-              (message) =>
+              (message, key) =>
                 message.type !== "text" &&
                 message.type !== "button" && (
-                  <div className="list-container">
+                  <div className="list-container" key={key}>
                     <input
                       id={`button${message.id}`}
                       name={`button${message.id}`}
@@ -314,9 +338,39 @@ const HandleExternalLink=(evt)=>{
                 )
             )}
 
-            <button onClick={handleAddList}>
+            <button className="actions-popup-button" onClick={handleAddList}>
               Add Item
               <FaPlus />
+            </button>
+          </div>
+
+          <div className="add-list-section">
+            <h5>Import List</h5>
+            <input
+              onChange={(evt) => setCustomVariable(evt.target.value)}
+              placeholder="Custom Variable Name"
+              value={CustomVariable}
+              className="list-input"
+            />
+            <div style={{ marginBottom: 20 }}>
+              <Autocomplete
+                // value={value}
+                onChange={(event, newValue) => {
+                  setSelectedFeilds(newValue);
+                }}
+                // inputValue={inputValue}
+
+                multiple
+                limitTags={1}
+                options={Feilds}
+                getOptionLabel={(option) => option}
+                renderInput={(params) => (
+                  <TextField style={{ width: "100%" }} {...params} />
+                )}
+              />
+            </div>
+            <button className="actions-popup-button" onClick={ImportLists}>
+              Import All List
             </button>
           </div>
 
@@ -351,6 +405,7 @@ const HandleExternalLink=(evt)=>{
               )}
 
               <button
+                className="actions-popup-button"
                 onClick={handleAddButton}
                 disabled={buttonItems.length >= 4 ? true : false}
               >
