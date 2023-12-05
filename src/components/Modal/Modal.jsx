@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
+import Select from "@mui/material/Select";
 import { JSONPath } from "jsonpath-plus";
 import "../../SettingComponents/NodeType/NodeType.css";
 
@@ -30,10 +30,18 @@ const Modal = ({
   const [apiResponse, setApiResponse] = useState({});
   const [JsonPath, setJsonPath] = useState("");
   const [CustomVariable, setCustomVariable] = useState("");
+  const [apiMethod,setApiMethod] = useState("get")
+  const [body,setBody] = useState()
+
+
+  const [keyValue,setKeyValue] = useState([])
+
   
   const [Feilds,setFeilds]=useState([]);
   const HandleResponse = () => {
-    axios
+
+    if(apiMethod == "get"){
+      axios
       .get(`${api}`)
       .then((res) => {
         setApiResponse(res.data);
@@ -41,6 +49,24 @@ const Modal = ({
       .catch((err) => {
         console.log(err);
       });
+    }
+    else{
+      axios
+      .post(`${api}`,{
+        "PhoneNumber":"+15550497019",
+        "password":"admin12345"
+      })
+      .then((res) => {
+        setApiResponse(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    }
+    
+
+
+
   };
   const HandleExtractData = () => {
     // if (Object.keys(apiResponse).length === 0) {
@@ -57,14 +83,32 @@ const Modal = ({
       console.error("Error extracting data:", error.message);
     }
   };
-const HandleExtractedFeilds=(ExtractedFeilds)=>{
 
-const NewExtractedFeilds=ExtractedFeilds.split(',')
-localStorage.setItem('ExtractedFeilds', JSON.stringify(NewExtractedFeilds));
 
-console.log('Extracted Feilds:',NewExtractedFeilds)
-setFeilds(NewExtractedFeilds)
-}
+  const HandleExtractedFeilds=(ExtractedFeilds)=>{
+    const NewExtractedFeilds=ExtractedFeilds.split(',')
+    localStorage.setItem('ExtractedFeilds', JSON.stringify(NewExtractedFeilds));
+
+    console.log('Extracted Feilds:',NewExtractedFeilds)
+    setFeilds(NewExtractedFeilds)
+  }
+
+
+  const handleAddKeyValue = () => {
+
+    const newItem = {
+      key: 'newKey', // Replace with your actual key
+      value: 'newValue', // Replace with your actual value
+    };
+
+    // Update the state by spreading the existing items and adding the new item
+    setKeyValue([...keyValue, newItem]);
+
+    console.log([...keyValue, newItem])
+    console.log("wejfh3iu")
+
+  }
+
   return (
     <React.Fragment>
       <Dialog open={open} onClose={handleClose}>
@@ -77,9 +121,9 @@ setFeilds(NewExtractedFeilds)
               alignItems: "center",
             }}
           >
-            <Select value="Get">
-              <MenuItem value="Get">Get</MenuItem>
-              <MenuItem value="Post">Post</MenuItem>
+            <Select value={apiMethod} onChange={(e)=>setApiMethod(e.target.value)}>
+              <MenuItem value="get">Get</MenuItem>
+              <MenuItem value="post">Post</MenuItem>
             </Select>
             <textarea
               placeholder="Enter Your Api"
@@ -98,6 +142,41 @@ setFeilds(NewExtractedFeilds)
               className="nodrag"
             />
           </div>
+
+
+          {
+            keyValue.map((item) => (
+              <div>
+                <input type="text" />
+                <input type="text" />
+              </div>
+            ))
+            
+          }
+
+
+
+
+          <button
+            onClick={handleAddKeyValue}
+            style={{
+              textAlign: "center",
+              width: "100%",
+              outline: "none",
+              background: "#4FCCC2",
+              color: "white",
+              padding: "10px 20px 10px 20px",
+              border: "none",
+              borderRadius: 5,
+              display: "block",
+              marginBottom: 5,
+            }}
+          >
+            Add Item
+          </button>
+
+
+
           <button
             onClick={HandleResponse}
             style={{
@@ -115,6 +194,10 @@ setFeilds(NewExtractedFeilds)
           >
             Get Response
           </button>
+
+
+
+
           <div
             style={{
               overflow: "auto",
