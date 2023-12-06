@@ -36,15 +36,21 @@ const NodeType = ({ id, isConnectable, data }) => {
   const handleClose = () => {
     setOpen(false);
   };
+
   useEffect(() => {
     if (CustomVariable) {
-      const data = JSON.parse(localStorage.getItem(CustomVariable)) || null;
-      console.log(data);
-      setData(data);
-      if (data?.length !== 0) {
-        const keys = Object.keys(data[0]);
-        setFeilds(keys);
-        console.log(keys, "keys");
+      const storedData =
+        JSON.parse(localStorage.getItem(CustomVariable)) || null;
+
+      if (storedData) {
+        console.log(storedData);
+        setData(storedData);
+
+        if (storedData.length !== 0) {
+          const keys = Object.keys(storedData[0]);
+          setFeilds(keys);
+          console.log(keys, "keys");
+        }
       }
     }
   }, [CustomVariable]);
@@ -132,22 +138,22 @@ const NodeType = ({ id, isConnectable, data }) => {
   };
 
   const ImportLists = () => {
-    console.log(data.text.length,"text length")
-    const NewMessages = Data.map((item,key) => {
+    console.log(data.text.length, "text length");
+    const NewMessages = Data.map((item, key) => {
       return {
-        id: data.text.length + key+1,
+        id: data.text.length + key + 1,
         type: "list",
         content: SelectedFeilds.map((field) => item[field]).join(" "),
         nodeId: id,
-        sourceHandle: `handle${data.text.length + key+1 + 1}`,
+        sourceHandle: `handle${data.text.length + key + 1 + 1}`,
       };
     });
-    console.log(NewMessages,'new messages');
+    console.log(NewMessages, "new messages");
     const UpdatedMessages = [...messages, ...NewMessages];
     setButtonItems(UpdatedMessages);
     setListItems(UpdatedMessages);
     setMessages(UpdatedMessages);
-    data.text=UpdatedMessages // This effect runs after the component has rendered and messages state has been updated
+    data.text = UpdatedMessages; // This effect runs after the component has rendered and messages state has been updated
   };
   return (
     <div className="text-updater-node">

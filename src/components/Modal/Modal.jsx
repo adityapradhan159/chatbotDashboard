@@ -30,43 +30,38 @@ const Modal = ({
   const [apiResponse, setApiResponse] = useState({});
   const [JsonPath, setJsonPath] = useState("");
   const [CustomVariable, setCustomVariable] = useState("");
-  const [apiMethod,setApiMethod] = useState("get")
-  const [body,setBody] = useState()
+  const [apiMethod, setApiMethod] = useState("get");
 
+  const [keyValue, setKeyValue] = useState([]);
 
-  const [keyValue,setKeyValue] = useState([])
-
-  
-  const [Feilds,setFeilds]=useState([]);
+  const [Feilds, setFeilds] = useState([]);
   const HandleResponse = () => {
-
-    if(apiMethod == "get"){
+    const requestBody = Object.fromEntries(
+      keyValue.map((item) => [item.key, item.value])
+    );
+    if (apiMethod == "get") {
       axios
-      .get(`${api}`)
-      .then((res) => {
-        setApiResponse(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    }
-    else{
+        .get(`${api}`)
+        .then((res) => {
+          setApiResponse(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
       axios
-      .post(`${api}`,{
-        "PhoneNumber":"+15550497019",
-        "password":"admin12345"
-      })
-      .then((res) => {
-        setApiResponse(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+        .post(`${api}`, requestBody)
+        // .post(`${api}`, {
+        //   PhoneNumber: "+15550497019",
+        //   password: "admin12345",
+        // })
+        .then((res) => {
+          setApiResponse(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
-    
-
-
-
   };
   const HandleExtractData = () => {
     // if (Object.keys(apiResponse).length === 0) {
@@ -77,37 +72,50 @@ const Modal = ({
     try {
       const data = JSONPath({ path: JsonPath, json: apiResponse });
       console.log("Extracted Data:", data);
-      setApiResponse(data)
+      setApiResponse(data);
       localStorage.setItem(CustomVariable, JSON.stringify(data));
     } catch (error) {
       console.error("Error extracting data:", error.message);
     }
   };
 
+  const HandleExtractedFeilds = (ExtractedFeilds) => {
+    const NewExtractedFeilds = ExtractedFeilds.split(",");
+    localStorage.setItem("ExtractedFeilds", JSON.stringify(NewExtractedFeilds));
 
-  const HandleExtractedFeilds=(ExtractedFeilds)=>{
-    const NewExtractedFeilds=ExtractedFeilds.split(',')
-    localStorage.setItem('ExtractedFeilds', JSON.stringify(NewExtractedFeilds));
+    console.log("Extracted Feilds:", NewExtractedFeilds);
+    setFeilds(NewExtractedFeilds);
+  };
 
-    console.log('Extracted Feilds:',NewExtractedFeilds)
-    setFeilds(NewExtractedFeilds)
-  }
+  // const handleAddKeyValue = () => {
+  //   const newItem = {
+  //     key: "newKey", // Replace with your actual key
+  //     value: "newValue", // Replace with your actual value
+  //   };
 
+  //   // Update the state by spreading the existing items and adding the new item
+  //   setKeyValue([...keyValue, newItem]);
+
+  //   console.log("keyValue", [...keyValue, newItem]);
+  //   console.log("wejfh3iu");
+  // };
 
   const handleAddKeyValue = () => {
+    setKeyValue([...keyValue, { key: "", value: "" }]);
+    console.log("keyValue", keyValue);
+  };
 
-    const newItem = {
-      key: 'newKey', // Replace with your actual key
-      value: 'newValue', // Replace with your actual value
-    };
+  const handleRemoveKeyValue = (index) => {
+    const updatedKeyValue = keyValue.filter((_, i) => i !== index);
+    setKeyValue(updatedKeyValue);
+  };
 
-    // Update the state by spreading the existing items and adding the new item
-    setKeyValue([...keyValue, newItem]);
-
-    console.log([...keyValue, newItem])
-    console.log("wejfh3iu")
-
-  }
+  const handleKeyValueChange = (index, key, value) => {
+    const updatedKeyValue = keyValue.map((item, i) =>
+      i === index ? { ...item, [key]: value } : item
+    );
+    setKeyValue(updatedKeyValue);
+  };
 
   return (
     <React.Fragment>
@@ -121,7 +129,10 @@ const Modal = ({
               alignItems: "center",
             }}
           >
-            <Select value={apiMethod} onChange={(e)=>setApiMethod(e.target.value)}>
+            <Select
+              value={apiMethod}
+              onChange={(e) => setApiMethod(e.target.value)}
+            >
               <MenuItem value="get">Get</MenuItem>
               <MenuItem value="post">Post</MenuItem>
             </Select>
@@ -143,39 +154,56 @@ const Modal = ({
             />
           </div>
 
+          {/* {keyValue.map((item) => (
+            <div>
+              <input type="text" />
+              <input type="text" />
+            </div>
+          ))} */}
 
-          {
-            keyValue.map((item) => (
-              <div>
-                <input type="text" />
-                <input type="text" />
-              </div>
-            ))
-            
-          }
+          {keyValue.map((item, index) => (
+            <div key={index}>
+              <input
+                type="text"
+                value={item.key}
+                onChange={(e) =>
+                  handleKeyValueChange(index, "key", e.target.value)
+                }
+              />
+              <input
+                type="text"
+                value={item.value}
+                onChange={(e) =>
+                  handleKeyValueChange(index, "value", e.target.value)
+                }
+              />
+              <Button onClick={() => handleRemoveKeyValue(index)}>
+                Remove
+              </Button>
+            </div>
+          ))}
 
-
-
-
-          <button
-            onClick={handleAddKeyValue}
-            style={{
-              textAlign: "center",
-              width: "100%",
-              outline: "none",
-              background: "#4FCCC2",
-              color: "white",
-              padding: "10px 20px 10px 20px",
-              border: "none",
-              borderRadius: 5,
-              display: "block",
-              marginBottom: 5,
-            }}
-          >
-            Add Item
-          </button>
-
-
+          {apiMethod == "post" && (
+            <>
+              <button
+                onClick={handleAddKeyValue}
+                style={{
+                  textAlign: "center",
+                  width: "100%",
+                  outline: "none",
+                  background: "#4FCCC2",
+                  color: "white",
+                  padding: "10px 20px 10px 20px",
+                  border: "none",
+                  borderRadius: 5,
+                  display: "block",
+                  marginBottom: 5,
+                }}
+              >
+                Add Item
+              </button>
+            </>
+          )}
 
           <button
             onClick={HandleResponse}
@@ -194,9 +222,6 @@ const Modal = ({
           >
             Get Response
           </button>
-
-
-
 
           <div
             style={{
