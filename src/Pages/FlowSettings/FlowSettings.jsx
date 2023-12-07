@@ -12,6 +12,7 @@ import {
 } from "reactflow";
 import NodeType from "../../SettingComponents/NodeType/NodeType";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 
 
@@ -19,9 +20,9 @@ const nodeTypes = { textUpdater: NodeType };
 
 const FlowSettings = () => {
 
-    
+  const {apiType} = useSelector((state) => state.StoredData)
 
-
+  console.log("api Type", apiType)
 
 
   const flowKey = "example-flow";
@@ -79,7 +80,8 @@ const FlowSettings = () => {
           type: "textUpdater",
           position: { x: 100, y: yPos.current },
           data: {
-            name:"Webhook Node"
+            name:"Webhook Node",
+            apiType:apiType
           },
         },
       ];
