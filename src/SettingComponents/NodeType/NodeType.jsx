@@ -589,14 +589,15 @@ const NodeType = ({ id, isConnectable, data }) => {
   };
 
   const ImportLists = () => {
-    console.log(data.text.length, "text length");
+    console.log(data);
     const NewMessages = Data.map((item, key) => {
       return {
-        id: data.text.length + key + 1,
+        id: data?.text?.length + key + 1,
         type: "list",
-        content: SelectedFeilds.map((field) => item[field]).join(" "),
+        // content: SelectedFeilds.map((field) => item[field]).join(" "),
+        content: item,
         nodeId: id,
-        sourceHandle: `handle${data.text.length + key + 1 + 1}`,
+        sourceHandle: `handle${data?.text?.length + key + 1 + 1}`,
       };
     });
     console.log(NewMessages, "new messages");
@@ -831,7 +832,7 @@ const NodeType = ({ id, isConnectable, data }) => {
 
                 multiple
                 limitTags={1}
-                options={Feilds}
+                options={Data}
                 getOptionLabel={(option) => option}
                 renderInput={(params) => (
                   <TextField style={{ width: "100%" }} {...params} />

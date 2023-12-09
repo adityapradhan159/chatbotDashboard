@@ -22,7 +22,7 @@ const FlowSettings = () => {
 
   const {apiType} = useSelector((state) => state.StoredData)
 
-  console.log("api Type", apiType)
+  // console.log("api Type", apiType)
 
 
   const flowKey = "example-flow";
@@ -81,7 +81,8 @@ const FlowSettings = () => {
           position: { x: 100, y: yPos.current },
           data: {
             name:"Webhook Node",
-            apiType:apiType
+            apiType:apiType,
+            fetchedData:`$.data[?(@.docId == 'emirates')].*.[*].time`
           },
         },
       ];

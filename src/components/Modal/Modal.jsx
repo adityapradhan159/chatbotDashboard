@@ -298,7 +298,7 @@ import Select from "@mui/material/Select";
 import { JSONPath } from "jsonpath-plus";
 import "../../SettingComponents/NodeType/NodeType.css";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Option } from "@mui/base/Option";
 import {setApiType} from "../../redux/Features/Data"
 import {
@@ -440,6 +440,22 @@ const Modal = ({
     });
     // dispatch(setApiType(e.target.value))
   }
+
+
+
+
+  // useEffect(() => {
+
+  //   axios.get("https://tudoorg.glitch.me/api/apiResponse")
+  //   .then((res) => {
+  //     console.log(res)
+  //   })
+  //   .catch((err) => {
+  //     console.log(err)
+  //   })
+    
+  // }, [])
+  
 
   return (
     <React.Fragment>
