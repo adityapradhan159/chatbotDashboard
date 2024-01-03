@@ -81,8 +81,28 @@ const FlowSettings = () => {
           position: { x: 100, y: yPos.current },
           data: {
             name:"Webhook Node",
-            apiType:apiType,
-            fetchedData:`$.data[?(@.docId == 'emirates')].*.[*].time`
+            apiType:"get",
+            customFields:[],
+            fetchedData:``
+          },
+        },
+      ];
+    });
+  }, []);
+
+
+  const addSchedularNode = useCallback(() => {
+    yPos.current += 100;
+    setNodes((els) => {
+      console.log(els);
+      return [
+        ...els,
+        {
+          id: Math.random().toString(),
+          type: "textUpdater",
+          position: { x: 100, y: yPos.current },
+          data: {
+            name:"Schedular Node",
           },
         },
       ];
@@ -145,7 +165,7 @@ const FlowSettings = () => {
   return (
     <ReactFlowProvider>
       <div className="Dashboard">
-        <Sidebar addNode={addNode} onSave={onSave} addHttpsNode={addHttpsNode}/>
+        <Sidebar addNode={addNode} onSave={onSave} addHttpsNode={addHttpsNode} addSchedularNode={addSchedularNode}/>
         <FlowDiagram
           nodeTypes={nodeTypes}
           setNodes={setNodes}

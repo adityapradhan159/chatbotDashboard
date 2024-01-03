@@ -2,9 +2,9 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   
-   users:[],
-   apiType:"get"
-
+  users:[],
+  apiType:"get",
+  apiUrl: null
 };
 
 const StoredData = createSlice({
@@ -18,9 +18,13 @@ const StoredData = createSlice({
     setApiType: (state, action) => {
       state.apiType = action.payload
     },
+
+    setApiUrl: (state, action) => {
+      state.apiType = action.payload
+    },
   },
 });
 
-export const { setUsers,setApiType} = StoredData.actions;
+export const { setUsers,setApiType,setApiUrl} = StoredData.actions;
 
 export default StoredData.reducer;

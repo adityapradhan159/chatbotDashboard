@@ -313,7 +313,8 @@ import {
   TextareaAutosize,
 } from "@mui/material";
 import axios from "axios";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import "./modal.css"
 const Modal = ({
   setExternalLink,
   api,
@@ -322,14 +323,30 @@ const Modal = ({
   handleClickOpen,
   apiLink,
   handleGetType,
-  setMethodType
+  setMethodType,
+  messageData,
+  allMesssages,
+  setMessages,
+  data
 }) => {
+
+  const {apiUrl} = useSelector((state) => state.StoredData)
+
+  // console.log(data, "Webhook node data")
+
   const [apiResponse, setApiResponse] = useState({});
   const [JsonPath, setJsonPath] = useState("");
   const [CustomVariable, setCustomVariable] = useState("");
+  const [customField,setCustomField] = useState([
+    {"variable":"", "jsonPath":""}
+  ])
   const [apiMethod, setApiMethod] = useState("get");
 
   const [keyValue, setKeyValue] = useState([]);
+  const [getParams, setGetParams] = useState([]);
+
+
+  console.log(data,"admwke")
 
 
 
@@ -365,20 +382,49 @@ const Modal = ({
         });
     }
   };
-  const HandleExtractData = () => {
-    // if (Object.keys(apiResponse).length === 0) {
-    //   console.log('API response is empty. Make sure to fetch the response first.');
-    //   return;
-    // }
+  // const HandleExtractData = () => {
+  //   // if (Object.keys(apiResponse).length === 0) {
+  //   //   console.log('API response is empty. Make sure to fetch the response first.');
+  //   //   return;
+  //   // }
 
+  //   try {
+  //     const data = JSONPath({ path: JsonPath, json: apiResponse });
+  //     console.log("Extracted Data:", data);
+  //     setApiResponse(data);
+  //     localStorage.setItem(CustomVariable, JSON.stringify(data));
+  //   } catch (error) {
+  //     console.error("Error extracting data:", error.message);
+  //   }
+  // };
+
+  const HandleExtractData = () => {
     try {
-      const data = JSONPath({ path: JsonPath, json: apiResponse });
-      console.log("Extracted Data:", data);
-      setApiResponse(data);
-      localStorage.setItem(CustomVariable, JSON.stringify(data));
+      customField.forEach((customFieldItem, index) => {
+        const { jsonPath, variable } = customFieldItem;
+  
+        if (!jsonPath) {
+          console.error('JSONPath is empty for custom field at index', index);
+          return;
+        }
+  
+        const data = JSONPath({ path: jsonPath, json: apiResponse });
+        console.log(`Extracted Data for ${variable}:`, data);
+  
+        setApiResponse(data);
+        localStorage.setItem(variable, JSON.stringify(data));
+
+        alert("Data Extracted successfully!")
+      });
     } catch (error) {
       console.error("Error extracting data:", error.message);
+      alert("Error extracting data:", error.message)
     }
+
+    console.log(customField,"Custom Field")
+    data.customFields = customField
+
+    console.log(data,"ERFErferfr")
   };
 
   const HandleExtractedFeilds = (ExtractedFeilds) => {
@@ -423,22 +469,7 @@ const Modal = ({
   const handleUpdateNode = (e) => {
     setApiMethod(e.target.value)
     
-    setNodes((els) => {
-      console.log(els);
-      return [
-        ...els,
-        {
-          id: Math.random().toString(),
-          type: "textUpdater",
-          position: { x: 100, y: yPos.current },
-          data: {
-            name:"Webhook Node",
-            apiType:e.target.type
-          },
-        },
-      ];
-    });
-    // dispatch(setApiType(e.target.value))
+    data.apiType = e.target.value
   }
 
 
@@ -455,6 +486,62 @@ const Modal = ({
   //   })
     
   // }, [])
+
+
+  const handleChange = (e) => {
+
+    let updatedMessages = allMesssages.map((message) =>
+    message.id === message.id
+      ? { ...message, variableType:e.target.value }
+      : message
+    );
+    setMessages(updatedMessages)
+    console.log(updatedMessages,"Updated")
+  }
+
+
+
+  const handleAddCustomField = () => {
+    setCustomField([...customField, {"variable": "", "jsonPath": ""}]);
+  }
+
+
+  const handleDeleteCustomField = (index) => {
+    setCustomField((prevState) => {
+      const newState = [...prevState];
+      newState.splice(index, 1); // Remove the item at the specified index
+      return newState;
+    });
+  };
+
+
+
+  const handleAddParams = () => {
+    setGetParams([...getParams, ""]);
+  }
+
+  const handleChangeParams = (index, value) => {
+    const newParams = [...getParams]; // Create a copy of the getParams array
+    newParams[index] = value; // Update the value at the specified index
+    setGetParams(newParams);
+    console.log(newParams)
+    data.getParams = newParams
+  };
+
+  const handleRemoveParams = (index) => {
+    const newParams = [...getParams]; // Create a copy of the getParams array
+    newParams.splice(index, 1); // Remove the item at the specified index
+    setGetParams(newParams); // Update the state with the new array
+    data.getParams = newParams
+  };
+
+
+
+
+  const handleDataSave = () => {
+    handleClose()
+    data.postParams = keyValue
+  }
   
 
   return (
@@ -538,9 +625,49 @@ const Modal = ({
                   borderRadius: 5,
                   display: "block",
                   marginBottom: 5,
+                  marginTop:"10px"
                 }}
               >
                 Add Item
+              </button>
+            </>
+          )}
+
+
+          {getParams.map((item, index) => (
+            <div key={index}>
+              <input
+                type="text"
+                value={item}
+                onChange={(e) =>
+                  handleChangeParams(index, e.target.value)
+                }
+              />
+              <Button onClick={() => handleRemoveParams(index)}>
+                Remove
+              </Button>
+            </div>
+          ))}
+
+          {apiMethod == "get" && (
+            <>
+              <button
+                onClick={handleAddParams}
+                style={{
+                  textAlign: "center",
+                  width: "100%",
+                  outline: "none",
+                  background: "#4FCCC2",
+                  color: "white",
+                  padding: "10px 20px 10px 20px",
+                  border: "none",
+                  borderRadius: 5,
+                  display: "block",
+                  marginBottom: 5,
+                  marginTop:"10px"
+                }}
+              >
+                Add Params
               </button>
             </>
           )}
@@ -558,6 +685,7 @@ const Modal = ({
               borderRadius: 5,
               display: "block",
               marginBottom: 5,
+              marginTop:"10px"
             }}
           >
             Get Response
@@ -573,57 +701,92 @@ const Modal = ({
           >
             <pre>{JSON.stringify(apiResponse, null, 2)}</pre>
           </div>
-          <div className="list-container">
-            <input
-              onChange={(evt) => setJsonPath(evt.target.value)}
-              value={JsonPath}
-              className="nodrag "
-              style={{
-                outline: "none",
-                padding: 5,
-                outlineColor: "gray",
-                border: "1px solid #e6e6e6",
-                borderRadius: 5,
-                width: "50%",
-                height: "50px",
-              }}
-              placeholder="JsonPath"
-            />
-            <input
-              onChange={(evt) => setCustomVariable(evt.target.value)}
-              value={CustomVariable}
-              className="nodrag "
-              style={{
-                outline: "none",
-                padding: 5,
-                outlineColor: "gray",
-                border: "1px solid #e6e6e6",
-                borderRadius: 5,
-                width: "50%",
-                height: "50px",
-              }}
-              placeholder="Custom Variable"
-            />
-            {/* <FormLabel>
-              You Can Add Multiple Feilds with each separate by comma
-            </FormLabel>
-            <input
-              onChange={(evt) => HandleExtractedFeilds(evt.target.value)}
-              className="nodrag "
-              style={{
-                outline: "none",
-                padding: 5,
-                outlineColor: "gray",
-                border: "1px solid #e6e6e6",
-                borderRadius: 5,
-                width: "100%",
-                height: "50px",
-              }}
-              placeholder="Felids to be Extracted (e.g., Days, Time)"
-            /> */}
-          </div>
+
+
+          {
+            customField.map((item, index) => (
+              <div className="list-container  extract-data">
+                <input
+                  onChange={(evt) =>
+                    setCustomField((prevState) => {
+                      const newState = [...prevState];
+                      newState[index].jsonPath = evt.target.value;
+                      return newState;
+                    })
+                  }
+                  value={item.jsonPath}
+                  
+                  className="nodrag "
+                  style={{
+                    outline: "none",
+                    padding: 5,
+                    outlineColor: "gray",
+                    border: "1px solid #e6e6e6",
+                    borderRadius: 5,
+                    width: "50%",
+                    height: "50px",
+                  }}
+                  placeholder="JsonPath"
+                />
+                <input
+                  onChange={(evt) =>
+                    setCustomField((prevState) => {
+                      const newState = [...prevState];
+                      newState[index].variable = evt.target.value;
+                      return newState;
+                    })
+                  }
+                  value={item.variable}
+                  className="nodrag "
+                  style={{
+                    outline: "none",
+                    padding: 5,
+                    outlineColor: "gray",
+                    border: "1px solid #e6e6e6",
+                    borderRadius: 5,
+                    width: "50%",
+                    height: "50px",
+                  }}
+                  placeholder="Custom Variable"
+                />
+                <select name="" id="" onChange={(e)=>handleChange(e)}>
+                <option value="Array">Array</option>
+                  <option value="Text">Text</option>
+                  
+                </select>
+                <button onClick={() => handleDeleteCustomField(index)}>Delete</button>
+            
+              </div>
+            ))
+          }
+
+
+          
+
+
+          
+          <button style={{
+              textAlign: "center",
+              width: "100%",
+              outline: "none",
+              background: "#4FCCC2",
+              color: "white",
+              padding: "10px 20px 10px 20px",
+              border: "none",
+              borderRadius: 5,
+              display: "block",
+              marginTop:"10px",
+              marginBottom: 5,
+            }}
+            onClick={handleAddCustomField}
+            >
+              Add Custom Field
+            </button>
+
+
           <button
             onClick={HandleExtractData}
+            className="mt-2"
             style={{
               textAlign: "center",
               width: "100%",
@@ -634,6 +797,7 @@ const Modal = ({
               border: "none",
               borderRadius: 5,
               display: "block",
+              marginTop:"10px",
               marginBottom: 5,
             }}
           >
@@ -642,7 +806,7 @@ const Modal = ({
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose}>Save</Button>
+          <Button onClick={handleDataSave}>Save</Button>
         </DialogActions>
       </Dialog>
     </React.Fragment>

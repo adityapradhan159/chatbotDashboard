@@ -17,6 +17,7 @@ const FlowDiagram = ({
   onConnect,
   onEdgesChange,
   nodeTypes,
+  setNodes
 }) => {
   // const nodeTypes = { textUpdater: NodeType };
 

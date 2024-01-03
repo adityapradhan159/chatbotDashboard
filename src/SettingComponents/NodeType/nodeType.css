@@ -82,6 +82,20 @@ font-size: 12px;
 .list-container{
   margin-top: 8px;
   position: relative;
+  /* display: flex; */
+  gap: 10px;
+}
+
+.list-container input{
+  /* width: calc(33%); */
+ 
+}
+.list-container select{
+
+  outline: gray none;
+    padding: 5px;
+    border: 1px solid rgb(230, 230, 230);
+    border-radius: 5px;
 }
 .list-container .delete-icon{
   position: absolute;

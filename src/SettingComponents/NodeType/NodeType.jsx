@@ -452,7 +452,13 @@ import axios from "axios";
 import Modal from "../../components/Modal/Modal";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
+import { setApiUrl } from "../../redux/Features/Data";
+import { useDispatch } from "react-redux";
+import { json } from "react-router-dom";
 const NodeType = ({ id, isConnectable, data }) => {
+
+
+  const dispatch = useDispatch()
 
   const [apiLink,setApiLink] = useState("")
   const [CustomVariable, setCustomVariable] = useState("");
@@ -461,7 +467,7 @@ const NodeType = ({ id, isConnectable, data }) => {
   const [SelectedFeilds, setSelectedFeilds] = useState([]);
   const [methodType,setMethodType] = useState("")
   const [messages, setMessages] = useState([
-    { id: 1, type: "text", content: "", nodeId: id },
+    { id: 1, type: "text", content: "", nodeId: id, dynamicContent:"", variableType:"Array"},
   ]);
   const [externalLink, setExternalLink] = useState("");
   const [listItems, setListItems] = useState([
@@ -507,6 +513,8 @@ const NodeType = ({ id, isConnectable, data }) => {
           message.id === id ? { ...message, content: message.content } : message
         );
       setMessages(storedMessages);
+      console.log(storedMessages,"weijwe")
+      dispatch(setApiUrl(storedMessages))
       setListItems(storedMessages);
       setButtonItems(storedMessages);
     }
@@ -514,12 +522,40 @@ const NodeType = ({ id, isConnectable, data }) => {
 
   // console.log("Id",id)
 
-  const handleChange = (messageId, evt) => {
-    const updatedMessages = messages.map((message) =>
+
+
+  const handleChange = (messageId, evt, msgContent) => {
+
+    const dynamicPlaceholder = evt.target.value.match(/\${([^}]*)}/)?.[1] || '';
+    const dynamicValue = localStorage.getItem(dynamicPlaceholder);
+
+    const dynamicRegex = new RegExp(`\\$\\{${dynamicPlaceholder}\\}`, 'g');
+
+    console.log(dynamicValue,"regex")
+    
+    const replacedString = evt.target.value.replace(dynamicRegex, dynamicValue || '');
+
+    console.log(replacedString,"Replce");
+
+    let updatedMessages;
+
+    if(dynamicPlaceholder){
+      updatedMessages = messages.map((message) =>
+      message.id === messageId
+        ? { ...message, content: evt.target.value, dynamicContent:replacedString, }
+        : message
+      );
+    }
+    else{
+      updatedMessages = messages.map((message) =>
       message.id === messageId
         ? { ...message, content: evt.target.value }
         : message
-    );
+      );
+    }
+    
+
+
     setButtonItems(updatedMessages);
     setListItems(updatedMessages);
     setMessages(updatedMessages);
@@ -529,7 +565,8 @@ const NodeType = ({ id, isConnectable, data }) => {
     console.log(updatedMessages,"Updated Messages")
 
     data.text = updatedMessages;
-    setApiLink(updatedMessages[0].content)
+    setApiLink(msgContent)
+    dispatch(setApiUrl(updatedMessages))
   };
 
 
@@ -575,6 +612,21 @@ const NodeType = ({ id, isConnectable, data }) => {
     setMessages([...messages, newButton]);
   };
 
+
+  const handleAddDynamicList = () => {
+    const newButton = {
+      id: messages.length + 1,
+      type: "dynamicList",
+      content: "",
+      nodeId: id,
+      sourceHandle: `handle${messages.length + 1}`,
+      dynamicList:"true"
+    };
+
+    // setListItems([...messages, newButton]);
+    setMessages([...messages, newButton]);
+  };
+
   const handleAddButton = () => {
     const newButton = {
       id: messages.length + 1,
@@ -592,12 +644,12 @@ const NodeType = ({ id, isConnectable, data }) => {
     console.log(data);
     const NewMessages = Data.map((item, key) => {
       return {
-        id: data?.text?.length + key + 1,
+        id: key + 1,
         type: "list",
         // content: SelectedFeilds.map((field) => item[field]).join(" "),
         content: item,
         nodeId: id,
-        sourceHandle: `handle${data?.text?.length + key + 1 + 1}`,
+        sourceHandle: `handle${data?.text?.length + 1 + 1}`,
       };
     });
     console.log(NewMessages, "new messages");
@@ -610,11 +662,6 @@ const NodeType = ({ id, isConnectable, data }) => {
 
 
 
-  // const handleGetType = () => {
-
-  // }
-
-
   return (
     <div className="text-updater-node">
       <Handle
@@ -624,6 +671,7 @@ const NodeType = ({ id, isConnectable, data }) => {
       />
       <div>
         {messages.map((message) => (
+          <>
           <div key={message.id}>
             {message.type === "text" ? (
               <div style={{ marginBottom: "10px" }}>
@@ -644,7 +692,7 @@ const NodeType = ({ id, isConnectable, data }) => {
                       id={`message${message.id}`}
                       name={`message${message.id}`}
                       onChange={(evt) => handleChange(message.id, evt)}
-                      value={message.content}
+                      value= {message.content}
                       className="nodrag"
                     />
                   </>
@@ -667,7 +715,7 @@ const NodeType = ({ id, isConnectable, data }) => {
                       id={`message${message.id}`}
                       name={`message${message.id}`}
                       // onChange={(evt) => HandleExternalLink(evt)}
-                      onChange={(evt) => handleChange(message.id, evt)}
+                      onChange={(evt) => handleChange(message.id, evt, message.content)}
                       value={message.content}
                       className="nodrag"
                     />
@@ -702,11 +750,28 @@ const NodeType = ({ id, isConnectable, data }) => {
               </div>
             )}
           </div>
+
+          <Modal
+            api={externalLink}
+            open={open}
+            data={data}
+            setExternalLink={setExternalLink}
+            handleClose={handleClose}
+            handleClickOpen={handleClickOpen}
+            apiLink={message.content}
+            messageData={message}
+            allMesssages={messages}
+            setMessages={setMessages}
+            // handleGetType={handleGetType}
+            setMethodType={setMethodType}
+          />
+        </>
+
         ))}
 
         {data.name == "Webhook Node" && (
           <div>
-            <Modal
+            {/* <Modal
               api={externalLink}
               open={open}
               setExternalLink={setExternalLink}
@@ -715,7 +780,7 @@ const NodeType = ({ id, isConnectable, data }) => {
               apiLink={apiLink}
               // handleGetType={handleGetType}
               setMethodType={setMethodType}
-            />
+            /> */}
             <button
               onClick={handleClickOpen}
               style={{
@@ -779,14 +844,54 @@ const NodeType = ({ id, isConnectable, data }) => {
       {showActionsPopup == true && (
         <div className="actions-popup">
           <h4>Action Items</h4>
+        
+          {/* ===================Dynamic List==================== */}
+          <div className="add-list-section">
+            <h5>Dynamic List</h5>
+            {messages.map(
+              (message, key) =>
+                // message.type !== "list" &&
+                message.type == "dynamicList" && (
+                  <div className="list-container" key={key}>
+                    <input
+                      id={`button${message.id}`}
+                      name={`button${message.id}`}
+                      onChange={(evt) =>
+                        handleChange(message.id, evt, message.type)
+                      }
+                      value={message.content}
+                      className="nodrag list-input"
+                      placeholder="Item name..."
+                    />
+                    <div
+                      className="delete-icon"
+                      onClick={() => handleDeleteButton(message.id)}
+                    >
+                      <MdDeleteForever />
+                    </div>
+                  </div>
+                )
+              )}
+              <button className="actions-popup-button" onClick={handleAddDynamicList} style={{marginTop:"10px"}}>
+                Add Item
+                <FaPlus />
+            </button>
+            {/* <button className="actions-popup-button" onClick={handleAddDynamicList} style={{marginTop:"10px"}}>
+                Save
+                <FaPlus />
+            </button> */}
+          </div>
+
+
+          {/* =====================Normal List========================== */}
 
           <div className="add-list-section">
             <h5>List</h5>
 
             {messages.map(
               (message, key) =>
-                message.type !== "text" &&
-                message.type !== "button" && (
+                // message.type !== "list" &&
+                message.type == "list" && (
                   <div className="list-container" key={key}>
                     <input
                       id={`button${message.id}`}
@@ -813,6 +918,10 @@ const NodeType = ({ id, isConnectable, data }) => {
               <FaPlus />
             </button>
           </div>
+
+
+
+
 
           <div className="add-list-section">
             <h5>Import List</h5>
@@ -851,8 +960,8 @@ const NodeType = ({ id, isConnectable, data }) => {
 
               {messages.map(
                 (message) =>
-                  message.type !== "text" &&
-                  message.type !== "list" && (
+                  // message.type !== "text" &&
+                  message.type == "button" && (
                     <div className="list-container">
                       <input
                         id={`button${message.id}`}
