@@ -401,6 +401,8 @@ db.once("open", () => {
     // Parse the request body from the POST
     let body = req.body;
     const whatsAppBusinessAccountId = req.body.entry[0].id;
+
+
     // console.log(whatsAppBusinessAccountId, "whatsppbvusinesaccounid");
     // console.log(req.body,)
     // Check the Incoming webhook message
@@ -408,6 +410,9 @@ db.once("open", () => {
     // console.log("Interactive",req.body.entry[0].changes[0].value.messages[0].interactive.list_reply.title)
 
     // info on WhatsApp text message payload: https://developers.facebook.com/docs/whatsapp/cloud-api/webhooks/payload-examples#text-messages
+    
+    
+    
     if (req.body.object) {
       
       console.log(req.body,"Body")
@@ -465,17 +470,10 @@ db.once("open", () => {
         } else {
           msg_body = req.body.entry[0].changes[0].value.messages[0].text.body;
         }
-        // console.log(msg_body, "user:", user, "from:", from);
+       
         console.log("selectedOptionId", selectedOptionId);
         console.log("selectedOption", selectedOption);
-        // io.emit("message", {
-        //   message:
-        //     msg_body ||
-        //     req.body.entry[0].changes[0].value.messages[0].interactive
-        //       .list_reply,
-        //   name: user,
-        //   number: from,
-        // });
+
         axios
           .post("https://tudoorg.glitch.me/api/chat", {
             name: user,
@@ -549,6 +547,7 @@ db.once("open", () => {
             // console.log("conversation flow", res.data[0].nodes);
 
             res.data[0].nodes.map((node) => {
+              
 
               //==========================Checking Node text length===========================//
               if (node.data.text) {
@@ -556,8 +555,9 @@ db.once("open", () => {
 
                 // console.log("Node Length")
                 node.data.text.map((text) => {
+
                   if (text.content == msg_body && text.type == "text") {
-                    // console.log(text.nodeId, "id");
+                    console.log(text.nodeId, "id");
 
                     res.data[0].edges.map((edge) => {
                       if (edge.source == text.nodeId) {
@@ -569,27 +569,19 @@ db.once("open", () => {
                           }
                         );
 
-                        console.log("FilteredArray", filteredNodesArray);
+                        // console.log("FilteredArray", filteredNodesArray);
 
                         filteredNodesArray.map((node) => {
                           
-                          console.log("HTTP LINK", node.data.text)
-                        
-                          console.log("HTTP LINK Content", node.data.text[0].content)
-                          
-                          
-                          
-                          
                         //===============If the next node is webhook node====================//
                           if (node.data.name == "Webhook Node") {
-                            console.log("yes i am http");
-                                                 
+
                             axios
                                   .get(`${node.data.text[0].content}`, 
                                 )
                                   .then((response) => {
-                                    console.log("Status Code...........",response.status)
-                                    console.log("res",response.data)
+                                    // console.log("Status Code...........",response.status)
+                                    // console.log("res",response.data)
                               
                                     const filteredEdges = res.data[0].edges.filter((el) => {
                                     // console.log(el,"Filtered Edge")
@@ -598,7 +590,7 @@ db.once("open", () => {
                                     );
                                   });
 
-                                  console.log(filteredEdges,"Filtered Edges")
+                                  // console.log(filteredEdges,"Filtered Edges")
 
 
                                   const filteredNode = res.data[0].nodes.filter((el) => {
@@ -608,7 +600,7 @@ db.once("open", () => {
                                     );
                                   });
 
-                                  console.log(filteredNode,"filtered Node")
+                                  // console.log(filteredNode,"filtered Node")
                               
                                     const HandleExtractData = () => {
                                       // if (Object.keys(apiResponse).length === 0) {
@@ -623,13 +615,13 @@ db.once("open", () => {
                                         const { jsonPath, variable } = customFieldItem;
 
                                         if (!jsonPath) {
-                                          console.error('JSONPath is empty for custom field at index', index);
+                                          // console.error('JSONPath is empty for custom field at index', index);
                                           return;
                                         }
 
                                         const data = JSONPath({ path: jsonPath, json: response.data });
                                           
-                                        console.log(data,"Data Json Path.......")
+                                        // console.log(data,"Data Json Path.......")
                                           
                                           
                                           if(data.length > 1){
@@ -638,7 +630,7 @@ db.once("open", () => {
                                             
                                             let newArray = data.map(
                                             (item,id) => ({
-                                              id: id,
+                                              id: `handle${id}-`+ node.id,
                                               title: item,
                                               description: "",
                                             })
@@ -692,15 +684,7 @@ db.once("open", () => {
                                           console.log(err)
                                         })
                                             
-                                          }
-                                        
-                                        
-                                          
-                                          
-                                          
-                                          
-                                        
-                                        
+                                      }    
                                         
                                        }); 
                                         
@@ -715,18 +699,17 @@ db.once("open", () => {
                                   .catch((err) => {
                                     console.log(err);
                                 });
-                        
                           }
 
                           else if (
                             node.data.text.length == 1 &&
                             node.data.name !== "Http Node" || node.data.text.length == 1 && node.data.name !== "Webhook Node"
                           ) {
-                            console.log("This is a text message");
+                            // console.log("This is a text message");
 
                             node.data.text.map((text) => {
                               if (text.nodeId == edge.target) {
-                                console.log(node.data.text, "Node Text wjebdniwefjbwein");
+                                // console.log(node.data.text, "Node Text wjebdniwefjbwein");
 
                                 axios
                                   .get(
@@ -836,11 +819,11 @@ db.once("open", () => {
 
                             // console.log("New array", newArray);
 
-                            console.log("filteredNodeTextArray",filteredNodeTextArray)
-                            console.log(
-                              "filteredNodeButtonArray",
-                              filteredNodeButtonArray
-                            );
+                            // console.log("filteredNodeTextArray",filteredNodeTextArray)
+                            // console.log(
+                            //   "filteredNodeButtonArray",
+                            //   filteredNodeButtonArray
+                            // );
 
                             if (filteredNodeButtonArray.length > 1) {
                               axios
@@ -994,9 +977,7 @@ db.once("open", () => {
                           
                           
                           else if(node.data.text.length == 1 && node.data.name == "Webhook Node"){
-                              console.log("This is the webhook node")
-                            
-                            
+                              // console.log("This is the webhook node")  
                           }   
                           
                           
@@ -1008,16 +989,7 @@ db.once("open", () => {
                     &&
                     text.id + text.nodeId == selectedOptionId && !text.dynamicList
                   ) {
-                    console.log("TEXT", text.content);
-                    console.log(text.sourceHandle, "SourceHandleid");
-                    console.log(
-                      text.nodeId,
-                      "Node Id",
-                      text.sourceHandle,
-                      "Source Handle Node"
-                    );
-                    
-                    console.log("this is  a selectedOption")
+
 
                     const filteredEdges = res.data[0].edges.filter((el) => {
                       return (
@@ -1046,7 +1018,7 @@ db.once("open", () => {
                         )
                         .then((res) => {
                           // console.log(res.data, "admin data");
-                        console.log('yes i am')
+                        // console.log('yes i am')
                           const adityaToken = res.data[0].accesToken;
 
                           axios({
@@ -1269,18 +1241,50 @@ db.once("open", () => {
                     }
                   }
                   
-                  else if(text.dynamicList && text.dynamicList == true){
-                         
-                    console.log(text.dynamicList,"uhnedfiwu3efhw3iu", text.id, text.nodeId, text.content,"Text Content")
+                  else if(text.dynamicList && text.dynamicList == "true"){
                     
-                    console.log(text.id +  text.nodeId, "Node Id.......", selectedOptionId, "SelectedOptionId..........")
                     
+                    
+                    
+                    console.log("This is dynamic Data")
+                    
+                    console.log(node,"Node")
+                    console.log(text,"This is text")
+
+
+                    
+                    const selectedDynamicId = selectedOptionId.split("-")[1]
+
+
+                    if(text.nodeId == selectedDynamicId){
+
+
+                      const filteredEdges = res.data[0].edges.filter((el) => {
+                        return (
+                          text.nodeId == el.source &&
+                          text.sourceHandle == el.sourceHandle
+                        );
+                      });
+
+  
+                      const filteredNodeEdges = res.data[0].nodes.filter((el) => {
+                        return filteredEdges[0]?.target == el.id;
+                      });
+
+
+                      console.log()
+
+
+
+                    }
+                    
+              
                     
                     const selectedDynamicOption = dynamicListMsg && dynamicListMsg.filter((el) => {
                       return el == selectedOption
                     })
                     
-                    console.log(selectedDynamicOption, "selectedDynamicOption")
+                    // console.log(selectedDynamicOption, "selectedDynamicOption")
                     
                     if(selectedDynamicOption && selectedDynamicOption.length > 0) {
                         
@@ -1290,6 +1294,8 @@ db.once("open", () => {
                         text.sourceHandle == el.sourceHandle
                       );
                     });
+                      
+                      console.log(filteredEdges,"Matching Edges")
 
                    
 
@@ -1306,7 +1312,7 @@ db.once("open", () => {
                                     );
                                   });
 
-                                  console.log(filteredEdges,"Filtered Edges")
+                                  console.log(dynamicEdges,"Filtered Edges")
 
 
                                   const dynamicNode = res.data[0].nodes.filter((el) => {
@@ -1320,10 +1326,28 @@ db.once("open", () => {
                       
                       if(filteredNodeEdges.length > 0 && filteredNodeEdges[0].data && filteredNodeEdges[0].data.name == "Webhook Node"){
                         
-                        console.log("Inside Webhook node with params")
+                        console.log("Inside Webhook node with params",filteredNodeEdges[0].data.apiType)
+                        
+                        if(dynamicNode[0].data.apiType == "post"){
+                            axios.post(filteredNodeEdges[0].data.text[0].content,
+                                {
+                                  name:"Aditya",
+                                  phone:"823092894894",
+                                  email:"aditya@jdhj.com"
+                                }
+                            )
+                          .then((res) => {
+                              console.log(res)
+                            })
+                          .catch((err) => {
+                              console.log(err)
+                            })
+                        }
                         
                         
-                        axios.get(filteredNodeEdges[0].data.text[0].content)
+                        else{
+                          
+                          axios.get(filteredNodeEdges[0].data.text[0].content)
                         .then((res) => {
                           console.log(res.data,"kerjf89ri")
                           
@@ -1457,6 +1481,11 @@ db.once("open", () => {
                         .catch((err) => {
                           console.log(err)
                         })
+                          
+                        }
+                        
+                        
+                        
                         
                       }
                     
@@ -1698,6 +1727,7 @@ db.once("open", () => {
                     }
                       
                   }
+                    
                   }
                   
                   

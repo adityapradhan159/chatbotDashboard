@@ -467,7 +467,7 @@ const NodeType = ({ id, isConnectable, data }) => {
   const [SelectedFeilds, setSelectedFeilds] = useState([]);
   const [methodType,setMethodType] = useState("")
   const [messages, setMessages] = useState([
-    { id: 1, type: "text", content: "", nodeId: id, dynamicContent:"", variableType:"Array"},
+    { id: 1, type: "text", content: "", nodeId: id},
   ]);
   const [externalLink, setExternalLink] = useState("");
   const [listItems, setListItems] = useState([
@@ -613,6 +613,22 @@ const NodeType = ({ id, isConnectable, data }) => {
   };
 
 
+
+
+  const handleAddResponseList = () => {
+    const newButton = {
+      id: messages.length + 1,
+      type: "userResponseVariable",
+      content: "",
+      nodeId: id,
+      sourceHandle: `handle${messages.length + 1}`,
+    };
+
+    // setListItems([...messages, newButton]);
+    setMessages([...messages, newButton]);
+  };
+
+
   const handleAddDynamicList = () => {
     const newButton = {
       id: messages.length + 1,
@@ -675,8 +691,59 @@ const NodeType = ({ id, isConnectable, data }) => {
           <div key={message.id}>
             {message.type === "text" ? (
               <div style={{ marginBottom: "10px" }}>
-                {data.name !== "Webhook Node" ? (
+                {data.name == "Webhook Node" ? (
                   <>
+                  <label htmlFor={`message${message.id}`}>
+                    External Link:
+                  </label>
+                  <textarea
+                    placeholder="Enter Your Api"
+                    rows={3}
+                    cols={25}
+                    style={{
+                      outline: "none",
+                      padding: 5,
+                      outlineColor: "gray",
+                      border: "1px solid #e6e6e6",
+                      borderRadius: 5,
+                    }}
+                    id={`message${message.id}`}
+                    name={`message${message.id}`}
+                    // onChange={(evt) => HandleExternalLink(evt)}
+                    onChange={(evt) => handleChange(message.id, evt, message.content)}
+                    value={message.content}
+                    className="nodrag"
+                  />
+                </>
+                ) : 
+                
+                data.name == "User Input Node" ?
+                (
+                 <>
+                    <label htmlFor={`message${message.id}`}>Enter your question:</label>
+                    <textarea
+                      placeholder="Enter Your Description"
+                      rows={3}
+                      cols={25}
+                      style={{
+                        outline: "none",
+                        padding: 5,
+                        outlineColor: "gray",
+                        border: "1px solid #e6e6e6",
+                        borderRadius: 5,
+                      }}
+                      id={`message${message.id}`}
+                      name={`message${message.id}`}
+                      onChange={(evt) => handleChange(message.id, evt)}
+                      value= {message.content}
+                      className="nodrag"
+                    />
+                  </>
+                )
+
+                :
+
+                <>
                     <label htmlFor={`message${message.id}`}>Description:</label>
                     <textarea
                       placeholder="Enter Your Description"
@@ -696,31 +763,9 @@ const NodeType = ({ id, isConnectable, data }) => {
                       className="nodrag"
                     />
                   </>
-                ) : (
-                  <>
-                    <label htmlFor={`message${message.id}`}>
-                      External Link:
-                    </label>
-                    <textarea
-                      placeholder="Enter Your Api"
-                      rows={3}
-                      cols={25}
-                      style={{
-                        outline: "none",
-                        padding: 5,
-                        outlineColor: "gray",
-                        border: "1px solid #e6e6e6",
-                        borderRadius: 5,
-                      }}
-                      id={`message${message.id}`}
-                      name={`message${message.id}`}
-                      // onChange={(evt) => HandleExternalLink(evt)}
-                      onChange={(evt) => handleChange(message.id, evt, message.content)}
-                      value={message.content}
-                      className="nodrag"
-                    />
-                  </>
-                )}
+              
+              
+              }
               </div>
             ) : (
               <div
@@ -844,6 +889,44 @@ const NodeType = ({ id, isConnectable, data }) => {
       {showActionsPopup == true && (
         <div className="actions-popup">
           <h4>Action Items</h4>
+
+
+          {/* ===================User input List==================== */}
+          <div className="add-list-section">
+            <h5>Save Response to a Custom Field</h5>
+            {messages.map(
+              (message, key) =>
+                // message.type !== "list" &&
+                message.type == "userResponseVariable" && (
+                  <div className="list-container" key={key}>
+                    <input
+                      id={`button${message.id}`}
+                      name={`button${message.id}`}
+                      onChange={(evt) =>
+                        handleChange(message.id, evt, message.type)
+                      }
+                      value={message.content}
+                      className="nodrag list-input"
+                      placeholder="Item name..."
+                    />
+                    <div
+                      className="delete-icon"
+                      onClick={() => handleDeleteButton(message.id)}
+                    >
+                      <MdDeleteForever />
+                    </div>
+                  </div>
+                )
+              )}
+              <button className="actions-popup-button" onClick={handleAddResponseList} style={{marginTop:"10px"}}>
+                Add Item
+                <FaPlus />
+            </button>
+            
+          </div>
+
+
+
         
           {/* ===================Dynamic List==================== */}
           <div className="add-list-section">
@@ -876,10 +959,7 @@ const NodeType = ({ id, isConnectable, data }) => {
                 Add Item
                 <FaPlus />
             </button>
-            {/* <button className="actions-popup-button" onClick={handleAddDynamicList} style={{marginTop:"10px"}}>
-                Save
-                <FaPlus />
-            </button> */}
+            
           </div>
 
 

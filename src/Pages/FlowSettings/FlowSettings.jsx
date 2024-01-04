@@ -91,7 +91,7 @@ const FlowSettings = () => {
   }, []);
 
 
-  const addSchedularNode = useCallback(() => {
+  const addUserInputNode = useCallback(() => {
     yPos.current += 100;
     setNodes((els) => {
       console.log(els);
@@ -102,7 +102,7 @@ const FlowSettings = () => {
           type: "textUpdater",
           position: { x: 100, y: yPos.current },
           data: {
-            name:"Schedular Node",
+            name:"User Input Node",
           },
         },
       ];
@@ -165,7 +165,7 @@ const FlowSettings = () => {
   return (
     <ReactFlowProvider>
       <div className="Dashboard">
-        <Sidebar addNode={addNode} onSave={onSave} addHttpsNode={addHttpsNode} addSchedularNode={addSchedularNode}/>
+        <Sidebar addNode={addNode} onSave={onSave} addHttpsNode={addHttpsNode} addUserInputNode={addUserInputNode}/>
         <FlowDiagram
           nodeTypes={nodeTypes}
           setNodes={setNodes}
