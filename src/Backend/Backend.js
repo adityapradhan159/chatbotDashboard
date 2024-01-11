@@ -73,6 +73,8 @@ server.listen(process.env.PORT || 1337, () => {
 });
 
 db.once("open", () => {
+
+  
   console.log("Connected to MongoDB");
   const ChatMessages = db.collection("ChatMessages");
   const admin = db.collection("Admins");
@@ -401,8 +403,6 @@ db.once("open", () => {
     // Parse the request body from the POST
     let body = req.body;
     const whatsAppBusinessAccountId = req.body.entry[0].id;
-
-
     // console.log(whatsAppBusinessAccountId, "whatsppbvusinesaccounid");
     // console.log(req.body,)
     // Check the Incoming webhook message
@@ -410,9 +410,6 @@ db.once("open", () => {
     // console.log("Interactive",req.body.entry[0].changes[0].value.messages[0].interactive.list_reply.title)
 
     // info on WhatsApp text message payload: https://developers.facebook.com/docs/whatsapp/cloud-api/webhooks/payload-examples#text-messages
-    
-    
-    
     if (req.body.object) {
       
       console.log(req.body,"Body")
@@ -440,6 +437,9 @@ db.once("open", () => {
 
         let selectedOption;
         let selectedOptionId;
+        
+        
+        console.log(req.body.entry[0].changes[0].value.messages[0],"9845093486043956840998650")
 
         if (req.body.entry[0].changes[0].value.messages[0].interactive) {
           // msg_body = req.body.entry[0].changes[0].value.messages[0].interactive.list_reply.title
@@ -470,10 +470,22 @@ db.once("open", () => {
         } else {
           msg_body = req.body.entry[0].changes[0].value.messages[0].text.body;
         }
-       
+        // console.log(msg_body, "user:", user, "from:", from);
         console.log("selectedOptionId", selectedOptionId);
         console.log("selectedOption", selectedOption);
-
+        
+        
+        
+        // io.emit("message", {
+        //   message:
+        //     msg_body ||
+        //     req.body.entry[0].changes[0].value.messages[0].interactive
+        //       .list_reply,
+        //   name: user,
+        //   number: from,
+        // });
+        
+        
         axios
           .post("https://tudoorg.glitch.me/api/chat", {
             name: user,
@@ -547,7 +559,23 @@ db.once("open", () => {
             // console.log("conversation flow", res.data[0].nodes);
 
             res.data[0].nodes.map((node) => {
-              
+              // console.log(node.data.text, "content", msg_body, "msgBody");
+              // console.log("msg body", msg_body);
+              // console.log(node.data.name, "is it http?");
+
+              // if (node.data.name = "Http Node") {
+              //   console.log("HTTP NODE DATA")
+              //   // node.data.text.map((text) => {
+              //   //   axios.get(`${text.content}`).then((res) => {
+              //   //     console.log(res, "fetchDAta");
+              //   //   })
+              //   //   .catch((err)=>{
+              //   //     console.log(err)
+              //   //   });
+              //   // });
+              // }
+
+              // console.log("Length of node", node.data.text.length)
 
               //==========================Checking Node text length===========================//
               if (node.data.text) {
@@ -555,9 +583,13 @@ db.once("open", () => {
 
                 // console.log("Node Length")
                 node.data.text.map((text) => {
-
+                  
+                  
+                  // console.log(text.content,"Text Content", msg_body, "Response Message")
+                  
+                  
                   if (text.content == msg_body && text.type == "text") {
-                    console.log(text.nodeId, "id");
+                    console.log(text.nodeId, "============id===============");
 
                     res.data[0].edges.map((edge) => {
                       if (edge.source == text.nodeId) {
@@ -573,15 +605,155 @@ db.once("open", () => {
 
                         filteredNodesArray.map((node) => {
                           
+                          
+                          // console.log(node, "9094j340934n9i9")
+                          
+                          // console.log("HTTP LINK", node.data.text)
+                        
+                          // console.log("HTTP LINK Content", node.data.text[0].content)
+                          
+                          
+                          
+                          
                         //===============If the next node is webhook node====================//
                           if (node.data.name == "Webhook Node") {
+                            // console.log("yes i am http");
+                            
+                            
+//                             const filteredEdges = res.data[0].edges.filter((el) => {
+//                               // console.log(el,"Filtered Edge")
+//                               return (
+//                                 node.data.text[0].nodeId == el.source 
+//                               );
+//                             });
+                            
+//                             console.log(filteredEdges,"Filtered Edges")
+                            
+                            
+//                             const filteredNode = res.data[0].nodes.filter((el) => {
+//                               // console.log(el,"Element")
+//                               return (
+//                                 filteredEdges[0].target == el.id 
+//                               );
+//                             });
+                            
+//                             console.log(filteredNode,"filtered Node")
+                            
+                            
+//                             console.log(filteredNode, "Filtered Node")
+                            
+//                             let dynamicList = filteredNode[0].data.text.filter((el) => {
+//                               return el.type !== "text"
+//                             })
+                            
+//                             console.log(dynamicList, "Dynamic list")
+                            
+//                             let newArray = dynamicList[0].dynamicList.map(
+//                               (item,id) => ({
+//                                 id: id,
+//                                 title: item,
+//                                 description: "",
+//                               })
+//                             );
+                            
+                            
+//                             const PostData = {
+//                               messaging_product: "whatsapp",
+//                                 to: from,
+//                                 type: "text",
+//                                 text: {
+//                                   body: filteredNode[0].data.text[0].dynamicContent.length > 0 ? filteredNode[0].data.text[0].dynamicContent :   filteredNode[0].data.text[0].content,
+//                                 },
+//                             }
+                            
+//                             const InteractivePostData = {
+                              
+//                                       messaging_product: "whatsapp",
+//                                       to: from,
+//                                       type: "interactive",
+//                                       interactive: {
+//                                         type: "list",
+//                                         body: {
+//                                           text: filteredNode[0].data.text[0].dynamicContent.length > 0 ? filteredNode[0].data.text[0].dynamicContent :   filteredNode[0].data.text[0].content,
+//                                         },
+//                                         action: {
+//                                           button: "Please Select",
+//                                           sections: [
+//                                             {
+//                                               rows: newArray,
+//                                             },
+//                                           ],
+//                                         },
+//                                       },
+                                    
+//                             }
+                            
+                            
+//                            axios
+//                                   .get(
+//                                     `https://tudoorg.glitch.me/api/admin?PhoneNumberId=${phone_number_id}`
+//                                   )
+//                                   .then((res) => {
+//                                     // console.log(res.data, "admin data");
+//                                     const adityaToken = res.data[0].accesToken;
 
+//                                     axios({
+//                                       method: "POST", // Required, HTTP method, a string, e.g. POST, GET
+//                                       url:
+//                                         "https://graph.facebook.com/v17.0/" +
+//                                         phone_number_id +
+//                                         "/messages?access_token=" +
+//                                         adityaToken,
+//                                       data: filteredNode[0].data.text.length > 1 ? InteractivePostData : PostData,
+//                                       headers: {
+//                                         "Content-Type": "application/json",
+//                                       },
+//                                     })
+//                                       .then((res) => {
+//                                         // console.log("Response",res)
+
+//                                         axios
+//                                           .post(
+//                                             "https://tudoorg.glitch.me/api/chat",
+//                                             {
+//                                               name: "admin",
+//                                               whatsAppBusinessAccountId:
+//                                                 whatsAppBusinessAccountId,
+//                                               chatId: from,
+//                                               message: filteredNode[0].data.text[0].dynamicContent.length > 0 ? filteredNode[0].data.text[0].dynamicContent :   filteredNode[0].data.text[0].content,
+//                                               timestamp:
+//                                                 timestamp.toISOString(), // Convert the Date object to an ISO string
+//                                             }
+//                                           )
+//                                           .then((response) => {
+//                                             // Handle the response from your server
+//                                             // console.log("Message saved:", response.data);
+//                                           })
+//                                           .catch((error) => {
+//                                             // Handle any errors
+//                                             console.error("Error:", error);
+//                                           });
+//                                       })
+
+//                                       .catch((err) => {
+//                                         console.log("Error", err);
+//                                       });
+//                                   });
+                                  
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
                             axios
                                   .get(`${node.data.text[0].content}`, 
                                 )
                                   .then((response) => {
                                     // console.log("Status Code...........",response.status)
-                                    // console.log("res",response.data)
+                                    console.log("res",response.data)
                               
                                     const filteredEdges = res.data[0].edges.filter((el) => {
                                     // console.log(el,"Filtered Edge")
@@ -600,7 +772,7 @@ db.once("open", () => {
                                     );
                                   });
 
-                                  // console.log(filteredNode,"filtered Node")
+                                  console.log(filteredNode,"filtered Node")
                               
                                     const HandleExtractData = () => {
                                       // if (Object.keys(apiResponse).length === 0) {
@@ -621,16 +793,16 @@ db.once("open", () => {
 
                                         const data = JSONPath({ path: jsonPath, json: response.data });
                                           
-                                        // console.log(data,"Data Json Path.......")
+                                        console.log(data,"Data Json Path.......")
                                           
                                           
-                                          if(data.length > 1){
+                                          if(data && data.length > 1){
                                             
                                             dynamicListMsg = data
                                             
                                             let newArray = data.map(
                                             (item,id) => ({
-                                              id: `handle${id}-`+ node.id,
+                                              id: `handle${id}-`+ filteredNode[0].id,
                                               title: item,
                                               description: "",
                                             })
@@ -684,7 +856,84 @@ db.once("open", () => {
                                           console.log(err)
                                         })
                                             
-                                      }    
+                                      }
+                                        
+                                        
+                                      else if(data && data.length == 1){
+                                        
+                                        
+                                        
+                                        let text = filteredNode[0].data.text[0].content;
+                                        let replacedText = text.replace(/\${(.*?)}/g, data[0]);
+                                        
+                                        
+                                        
+                                        axios
+                                  .get(
+                                    `https://tudoorg.glitch.me/api/admin?PhoneNumberId=${phone_number_id}`
+                                  )
+                                  .then((res) => {
+                                    // console.log(res.data, "admin data");
+                                    const adityaToken = res.data[0].accesToken;
+
+                                    axios({
+                                      method: "POST", // Required, HTTP method, a string, e.g. POST, GET
+                                      url:
+                                        "https://graph.facebook.com/v17.0/" +
+                                        phone_number_id +
+                                        "/messages?access_token=" +
+                                        adityaToken,
+                                      data: {
+                                        messaging_product: "whatsapp",
+                                        to: from,
+                                        type: "image",
+                                        image: {
+                                          link:  replacedText,
+                                        },
+                                      },
+                                      headers: {
+                                        "Content-Type": "application/json",
+                                      },
+                                    })
+                                      .then((res) => {
+                                        // console.log("Response",res)
+
+                                        axios
+                                          .post(
+                                            "https://tudoorg.glitch.me/api/chat",
+                                            {
+                                              name: "admin",
+                                              whatsAppBusinessAccountId:
+                                                whatsAppBusinessAccountId,
+                                              chatId: from,
+                                              message: replacedText,
+                                              timestamp:
+                                                timestamp.toISOString(), // Convert the Date object to an ISO string
+                                            }
+                                          )
+                                          .then((response) => {
+                                            // Handle the response from your server
+                                            // console.log("Message saved:", response.data);
+                                          })
+                                          .catch((error) => {
+                                            // Handle any errors
+                                            console.error("Error:", error);
+                                          });
+                                      })
+
+                                      .catch((err) => {
+                                        console.log("Error", err);
+                                      });
+                                  });
+                                        
+                                        
+
+                                      }
+                                          
+                                          
+                                          
+                                        
+                                        
                                         
                                        }); 
                                         
@@ -699,17 +948,96 @@ db.once("open", () => {
                                   .catch((err) => {
                                     console.log(err);
                                 });
+                            
+                            
+                            
+                            
+//                             axios
+//                                   .get(
+//                                     `https://tudoorg.glitch.me/api/admin?PhoneNumberId=${phone_number_id}`
+//                                   )
+//                                   .then((res) => {
+//                                     // console.log(res.data, "admin data");
+//                                     const adityaToken = res.data[0].accesToken;
+                            
+//                                 axios
+//                               .get(`${node.data.text[0].content}`)
+//                               .then((res) => {
+                               
+                                  
+                                  
+//                                     axios({
+//                                       method: "POST", // Required, HTTP method, a string, e.g. POST, GET
+//                                       url:
+//                                         "https://graph.facebook.com/v17.0/" +
+//                                         phone_number_id +
+//                                         "/messages?access_token=" +
+//                                         adityaToken,
+//                                       data: {
+//                                         messaging_product: "whatsapp",
+//                                         to: from,
+//                                         type: "text",
+//                                         text: {
+//                                           body: res.data.body,
+//                                         },
+//                                       },
+//                                       headers: {
+//                                         "Content-Type": "application/json",
+//                                       },
+//                                     })
+//                                       .then((res) => {
+//                                         // console.log("Response",res)
+
+//                                         axios
+//                                           .post(
+//                                             "https://tudoorg.glitch.me/api/chat",
+//                                             {
+//                                               name: "admin",
+//                                               whatsAppBusinessAccountId:
+//                                                 whatsAppBusinessAccountId,
+//                                               chatId: from,
+//                                               message: res.data.body,
+//                                               timestamp:
+//                                                 timestamp.toISOString(), // Convert the Date object to an ISO string
+//                                             }
+//                                           )
+//                                           .then((response) => {
+//                                             // Handle the response from your server
+//                                             // console.log("Message saved:", response.data);
+//                                           })
+//                                           .catch((error) => {
+//                                             // Handle any errors
+//                                             console.error("Error:", error);
+//                                           });
+//                                       })
+
+//                                       .catch((err) => {
+//                                         console.log("Error", err);
+//                                       });                                  
+                                
+//                               })
+//                               .catch((err) => {
+//                                 console.log(err);
+//                               });
+                            
+                            
+                            
+//                             })
+                            
+                        
                           }
 
-                          else if (
-                            node.data.text.length == 1 &&
-                            node.data.name !== "Http Node" || node.data.text.length == 1 && node.data.name !== "Webhook Node"
+                          else if (node.data.text.length == 1 && node.data.name !== "Webhook Node" ||
+                             node.data.text.length == 1 && node.data.name !== "User Input Node"
                           ) {
-                            // console.log("This is a text message");
+                            console.log("This is a text message");
 
                             node.data.text.map((text) => {
                               if (text.nodeId == edge.target) {
                                 // console.log(node.data.text, "Node Text wjebdniwefjbwein");
+                                
+                                
+                                
 
                                 axios
                                   .get(
@@ -731,7 +1059,7 @@ db.once("open", () => {
                                         to: from,
                                         type: "text",
                                         text: {
-                                          body: text.dynamicContent.length > 0 ? text.dynamicContent :  text.content,
+                                          body:  text.dynamicContent && text.dynamicContent.length > 0 ? text.dynamicContent :  text.content,
                                         },
                                       },
                                       headers: {
@@ -770,7 +1098,12 @@ db.once("open", () => {
                                   });
                               }
                             });
-                          } else if(node.data.text.length > 1 && node.data.name !== "Http Node" || node.data.text.length > 1 && node.data.name !== "Webhook Node") {
+                          } else if(
+                                    node.data.text.length > 1 && node.data.name !== "Webhook Node" &&
+                                   node.data.text.length > 1 && node.data.name !== "User Input Node"
+                                   ) {
+                            
+                            
                             console.log("This is a Interactive Message");
 
                             // console.log(node);
@@ -976,8 +1309,18 @@ db.once("open", () => {
                           }
                           
                           
-                          else if(node.data.text.length == 1 && node.data.name == "Webhook Node"){
-                              // console.log("This is the webhook node")  
+                          else if(node.data.text.length > 1 && node.data.name == "User Input Node"){
+
+                            
+                            
+                              console.log(node.id,"This is the user input node")
+                            
+                            
+                            
+                            
+                            
+                              
+                            
                           }   
                           
                           
@@ -989,7 +1332,16 @@ db.once("open", () => {
                     &&
                     text.id + text.nodeId == selectedOptionId && !text.dynamicList
                   ) {
-
+                    // console.log("TEXT", text.content);
+                    // console.log(text.sourceHandle, "SourceHandleid");
+                    // console.log(
+                    //   text.nodeId,
+                    //   "Node Id",
+                    //   text.sourceHandle,
+                    //   "Source Handle Node"
+                    // );
+                    
+                    // console.log("this is  a selectedOption")
 
                     const filteredEdges = res.data[0].edges.filter((el) => {
                       return (
@@ -1250,15 +1602,15 @@ db.once("open", () => {
                     
                     console.log(node,"Node")
                     console.log(text,"This is text")
-
-
+                    
+                    
                     
                     const selectedDynamicId = selectedOptionId.split("-")[1]
+                    console.log(selectedDynamicId,"92urjd9384jdrh398")
 
 
                     if(text.nodeId == selectedDynamicId){
-
-
+                      
                       const filteredEdges = res.data[0].edges.filter((el) => {
                         return (
                           text.nodeId == el.source &&
@@ -1272,13 +1624,68 @@ db.once("open", () => {
                       });
 
 
-                      console.log()
+                      console.log(filteredNodeEdges, 'Matching Nodes...............')
+                      
+                      if(filteredNodeEdges[0].data.name == "Webhook Node" && filteredNodeEdges[0].data.apiType == "post"){
+                        
+                        
+                        console.log(filteredNodeEdges[0].data.postParams,"8u948i34e....................")
+                        
+                        
+                          // Convert array to object
+                          let data = filteredNodeEdges[0].data.postParams.reduce((acc, cur) => {
+                            acc[cur.key] = cur.value;
+                            return acc;
+                          }, {});
+                        
+                        console.log(data,"Object wieh89e..................")
 
-
-
+                        
+                        
+                        
+                        for (let key in data) {
+                          if (data[key] === 'user') {
+                            data[key] = user;
+                          } else if (data[key] === 'from') {
+                            data[key] = from;
+                          }
+                        }
+                        
+                        
+                        console.log(data,"92r93j48934hj")
+                        
+                        
+                        
+                        
+                        
+                        
+                          axios.post(filteredNodeEdges[0].data.text[0].content,data)
+                          .then((res) => {
+                            
+                              console.log(res)
+                            
+                            })
+                          .catch((err) => {
+                              console.log(err)
+                            })
+                        
+                      }
+                      
+                        
                     }
                     
-              
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+//                     console.log(text.dynamicList,"uhnedfiwu3efhw3iu", text.id, text.nodeId, text.content,"Text Content")
+                    
+//                     console.log(text.id +  text.nodeId, "Node Id.......", selectedOptionId, "SelectedOptionId..........")
+                    
                     
                     const selectedDynamicOption = dynamicListMsg && dynamicListMsg.filter((el) => {
                       return el == selectedOption
@@ -1396,7 +1803,7 @@ db.once("open", () => {
                                             
                                             let newArray = data.map(
                                             (item,id) => ({
-                                              id: id,
+                                              id: `handle${id}-`+ dynamicNode[0].id,
                                               title: item,
                                               description: "",
                                             })
@@ -1727,6 +2134,14 @@ db.once("open", () => {
                     }
                       
                   }
+                    
+                    
+                    
+                    
+                    
+                    
+                   
+                    
                     
                   }
                   

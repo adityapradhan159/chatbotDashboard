@@ -361,7 +361,8 @@ const Modal = ({
       axios
         .get(`${apiLink}`)
         .then((res) => {
-          setApiResponse(res.data);
+          setApiResponse(res);
+          console.log(res.data,"jwehfiuw")
         })
         .catch((err) => {
           console.log(err);
