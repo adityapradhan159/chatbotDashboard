@@ -343,14 +343,15 @@ const Modal = ({
   const [apiMethod, setApiMethod] = useState("get");
 
   const [keyValue, setKeyValue] = useState([]);
+  const [headersValue, setHeadersValue] = useState([]);
+  const [headerObj, setHeaderObj] = useState({});
+  const [bodyType, setBodyType] = useState("json");
   const [getParams, setGetParams] = useState([]);
+  const [responseVal, setResponseVal] = useState([]);
 
+  // console.log(data,"admwke")
 
-  console.log(data,"admwke")
-
-
-
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const [Feilds, setFeilds] = useState([]);
   const HandleResponse = () => {
@@ -362,7 +363,7 @@ const Modal = ({
         .get(`${apiLink}`)
         .then((res) => {
           setApiResponse(res);
-          console.log(res.data,"jwehfiuw")
+          console.log(res.data, "jwehfiuw");
         })
         .catch((err) => {
           console.log(err);
@@ -375,7 +376,7 @@ const Modal = ({
         //   password: "admin12345",
         // })
         .then((res) => {
-          console.log("Status Code...........",res.status)
+          console.log("Status Code...........", res.status);
           setApiResponse(res);
         })
         .catch((err) => {
@@ -403,29 +404,29 @@ const Modal = ({
     try {
       customField.forEach((customFieldItem, index) => {
         const { jsonPath, variable } = customFieldItem;
-  
+
         if (!jsonPath) {
-          console.error('JSONPath is empty for custom field at index', index);
+          console.error("JSONPath is empty for custom field at index", index);
           return;
         }
-  
+
         const data = JSONPath({ path: jsonPath, json: apiResponse });
         console.log(`Extracted Data for ${variable}:`, data);
-  
+
         setApiResponse(data);
         localStorage.setItem(variable, JSON.stringify(data));
 
-        alert("Data Extracted successfully!")
+        alert("Data Extracted successfully!");
       });
     } catch (error) {
       console.error("Error extracting data:", error.message);
-      alert("Error extracting data:", error.message)
+      alert("Error extracting data:", error.message);
     }
 
-    console.log(customField,"Custom Field")
-    data.customFields = customField
+    console.log(customField, "Custom Field");
+    data.customFields = customField;
 
-    console.log(data,"ERFErferfr")
+    console.log(data, "ERFErferfr");
   };
 
   const HandleExtractedFeilds = (ExtractedFeilds) => {
@@ -459,6 +460,16 @@ const Modal = ({
     setKeyValue(updatedKeyValue);
   };
 
+  const handleRemoveRespVal = (index) => {
+    const updatedKeyValue = keyValue.filter((_, i) => i !== index);
+    setResponseVal(updatedKeyValue);
+  };
+
+  const handleRemoveHeadersValue = (index) => {
+    const updatedKeyValue = headersValue.filter((_, i) => i !== index);
+    setHeadersValue(updatedKeyValue);
+  };
+
   const handleKeyValueChange = (index, key, value) => {
     const updatedKeyValue = keyValue.map((item, i) =>
       i === index ? { ...item, [key]: value } : item
@@ -466,15 +477,32 @@ const Modal = ({
     setKeyValue(updatedKeyValue);
   };
 
+  const handleHeaderValueChange = (index, key, value) => {
+    const updatedKeyValue = headersValue.map((item, i) =>
+      i === index ? { ...item, [key]: value } : item
+    );
+
+    setHeadersValue(updatedKeyValue);
+
+    const headersObject = updatedKeyValue.reduce((obj, item) => {
+      obj[item.key] = item.value;
+      return obj;
+    }, {});
+
+    setHeaderObj(headersObject);
+  };
+
+  const handleRespValueChange = (index, key, value) => {
+    const updatedKeyValue = responseVal.map((item, i) =>
+      i === index ? { ...item, [key]: value } : item
+    );
+    setResponseVal(updatedKeyValue);
+  };
 
   const handleUpdateNode = (e) => {
-    setApiMethod(e.target.value)
-    
-    data.apiType = e.target.value
-  }
-
-
-
+    setApiMethod(e.target.value);
+    data.apiType = e.target.value;
+  };
 
   // useEffect(() => {
 
@@ -485,27 +513,22 @@ const Modal = ({
   //   .catch((err) => {
   //     console.log(err)
   //   })
-    
+
   // }, [])
 
-
   const handleChange = (e) => {
-
     let updatedMessages = allMesssages.map((message) =>
-    message.id === message.id
-      ? { ...message, variableType:e.target.value }
-      : message
+      message.id === message.id
+        ? { ...message, variableType: e.target.value }
+        : message
     );
-    setMessages(updatedMessages)
-    console.log(updatedMessages,"Updated")
-  }
-
-
+    setMessages(updatedMessages);
+    console.log(updatedMessages, "Updated");
+  };
 
   const handleAddCustomField = () => {
-    setCustomField([...customField, {"variable": "", "jsonPath": ""}]);
-  }
-
+    setCustomField([...customField, { variable: "", jsonPath: "" }]);
+  };
 
   const handleDeleteCustomField = (index) => {
     setCustomField((prevState) => {
@@ -515,35 +538,45 @@ const Modal = ({
     });
   };
 
-
-
   const handleAddParams = () => {
     setGetParams([...getParams, ""]);
-  }
+  };
+
+  const handleAddHeadersValue = () => {
+    setHeadersValue([...headersValue, ""]);
+  };
 
   const handleChangeParams = (index, value) => {
     const newParams = [...getParams]; // Create a copy of the getParams array
     newParams[index] = value; // Update the value at the specified index
     setGetParams(newParams);
-    console.log(newParams)
-    data.getParams = newParams
+    console.log(newParams);
+    data.getParams = newParams;
   };
 
   const handleRemoveParams = (index) => {
     const newParams = [...getParams]; // Create a copy of the getParams array
     newParams.splice(index, 1); // Remove the item at the specified index
     setGetParams(newParams); // Update the state with the new array
-    data.getParams = newParams
+    data.getParams = newParams;
   };
 
-
-
-
   const handleDataSave = () => {
-    handleClose()
-    data.postParams = keyValue
-  }
-  
+    handleClose();
+    data.postParams = keyValue;
+    data.responseVal = responseVal;
+    (data.headerObj = headerObj), (data.bodyType = bodyType);
+  };
+
+  const handleSaveResponse = () => {
+    setResponseVal([...responseVal, { key: "", value: "" }]);
+  };
+
+  const [selectedTab, setSelectedTab] = useState(0);
+
+  const handleTab = (id) => {
+    setSelectedTab(id);
+  };
 
   return (
     <React.Fragment>
@@ -557,10 +590,7 @@ const Modal = ({
               alignItems: "center",
             }}
           >
-            <Select
-              value={apiMethod}
-              onChange={(e) => handleUpdateNode(e)}
-            >
+            <Select value={apiMethod} onChange={(e) => handleUpdateNode(e)}>
               <MenuItem value="get">Get</MenuItem>
               <MenuItem value="post">Post</MenuItem>
             </Select>
@@ -582,12 +612,82 @@ const Modal = ({
             />
           </div>
 
-          {/* {keyValue.map((item) => (
-            <div>
-              <input type="text" />
-              <input type="text" />
+          {apiMethod !== "" && (
+            <div className="postApiTypes">
+              <div className="postTabs">
+                <div onClick={() => handleTab(0)}>Headers</div>
+                <div onClick={() => handleTab(1)}>Body Type</div>
+              </div>
+
+              {selectedTab == 0 ? (
+                <div className="postHeaders">
+                  {headersValue &&
+                    headersValue.map((item, index) => (
+                      <>
+                        <div key={index}>
+                          <input
+                            type="text"
+                            value={item.key}
+                            onChange={(e) =>
+                              handleHeaderValueChange(
+                                index,
+                                "key",
+                                e.target.value
+                              )
+                            }
+                          />
+                          <input
+                            type="text"
+                            value={item.value}
+                            onChange={(e) =>
+                              handleHeaderValueChange(
+                                index,
+                                "value",
+                                e.target.value
+                              )
+                            }
+                          />
+                          <Button
+                            onClick={() => handleRemoveHeadersValue(index)}
+                          >
+                            Remove
+                          </Button>
+                        </div>
+                      </>
+                    ))}
+                  <button
+                    onClick={handleAddHeadersValue}
+                    style={{
+                      textAlign: "center",
+                      width: "100%",
+                      outline: "none",
+                      background: "#4FCCC2",
+                      color: "white",
+                      padding: "10px 20px 10px 20px",
+                      border: "none",
+                      borderRadius: 5,
+                      display: "block",
+                      marginBottom: 5,
+                      marginTop: "10px",
+                    }}
+                  >
+                    Add Header value
+                  </button>
+                </div>
+              ) : (
+                <div className="postBodyType">
+                  <select
+                    name=""
+                    id=""
+                    onChange={(e) => setBodyType(e.target.value)}
+                  >
+                    <option value="json">Json</option>
+                    <option value="queryString">Query String</option>
+                  </select>
+                </div>
+              )}
             </div>
-          ))} */}
+          )}
 
           {keyValue.map((item, index) => (
             <div key={index}>
@@ -611,6 +711,35 @@ const Modal = ({
             </div>
           ))}
 
+          {apiMethod == "post" && responseVal.length > 0 ? (
+            responseVal.map((item, index) => (
+              <>
+                <h2>Save Response</h2>
+                <div key={index}>
+                  <input
+                    type="text"
+                    value={item.key}
+                    onChange={(e) =>
+                      handleRespValueChange(index, "key", e.target.value)
+                    }
+                  />
+                  <input
+                    type="text"
+                    value={item.value}
+                    onChange={(e) =>
+                      handleRespValueChange(index, "value", e.target.value)
+                    }
+                  />
+                  <Button onClick={() => handleRemoveRespVal(index)}>
+                    Remove
+                  </Button>
+                </div>
+              </>
+            ))
+          ) : (
+            <></>
+          )}
+
           {apiMethod == "post" && (
             <>
               <button
@@ -626,27 +755,41 @@ const Modal = ({
                   borderRadius: 5,
                   display: "block",
                   marginBottom: 5,
-                  marginTop:"10px"
+                  marginTop: "10px",
                 }}
               >
                 Add Item
               </button>
+
+              <button
+                onClick={handleSaveResponse}
+                style={{
+                  textAlign: "center",
+                  width: "100%",
+                  outline: "none",
+                  background: "#4FCCC2",
+                  color: "white",
+                  padding: "10px 20px 10px 20px",
+                  border: "none",
+                  borderRadius: 5,
+                  display: "block",
+                  marginBottom: 5,
+                  marginTop: "10px",
+                }}
+              >
+                Save Response
+              </button>
             </>
           )}
-
 
           {getParams.map((item, index) => (
             <div key={index}>
               <input
                 type="text"
                 value={item}
-                onChange={(e) =>
-                  handleChangeParams(index, e.target.value)
-                }
+                onChange={(e) => handleChangeParams(index, e.target.value)}
               />
-              <Button onClick={() => handleRemoveParams(index)}>
-                Remove
-              </Button>
+              <Button onClick={() => handleRemoveParams(index)}>Remove</Button>
             </div>
           ))}
 
@@ -665,7 +808,7 @@ const Modal = ({
                   borderRadius: 5,
                   display: "block",
                   marginBottom: 5,
-                  marginTop:"10px"
+                  marginTop: "10px",
                 }}
               >
                 Add Params
@@ -686,7 +829,7 @@ const Modal = ({
               borderRadius: 5,
               display: "block",
               marginBottom: 5,
-              marginTop:"10px"
+              marginTop: "10px",
             }}
           >
             Get Response
@@ -703,70 +846,62 @@ const Modal = ({
             <pre>{JSON.stringify(apiResponse, null, 2)}</pre>
           </div>
 
-
-          {
-            customField.map((item, index) => (
-              <div className="list-container  extract-data">
-                <input
-                  onChange={(evt) =>
-                    setCustomField((prevState) => {
-                      const newState = [...prevState];
-                      newState[index].jsonPath = evt.target.value;
-                      return newState;
-                    })
-                  }
-                  value={item.jsonPath}
-                  
-                  className="nodrag "
-                  style={{
-                    outline: "none",
-                    padding: 5,
-                    outlineColor: "gray",
-                    border: "1px solid #e6e6e6",
-                    borderRadius: 5,
-                    width: "50%",
-                    height: "50px",
-                  }}
-                  placeholder="JsonPath"
-                />
-                <input
-                  onChange={(evt) =>
-                    setCustomField((prevState) => {
-                      const newState = [...prevState];
-                      newState[index].variable = evt.target.value;
-                      return newState;
-                    })
-                  }
-                  value={item.variable}
-                  className="nodrag "
-                  style={{
-                    outline: "none",
-                    padding: 5,
-                    outlineColor: "gray",
-                    border: "1px solid #e6e6e6",
-                    borderRadius: 5,
-                    width: "50%",
-                    height: "50px",
-                  }}
-                  placeholder="Custom Variable"
-                />
-                <select name="" id="" onChange={(e)=>handleChange(e)}>
+          {customField.map((item, index) => (
+            <div className="list-container  extract-data">
+              <input
+                onChange={(evt) =>
+                  setCustomField((prevState) => {
+                    const newState = [...prevState];
+                    newState[index].jsonPath = evt.target.value;
+                    return newState;
+                  })
+                }
+                value={item.jsonPath}
+                className="nodrag "
+                style={{
+                  outline: "none",
+                  padding: 5,
+                  outlineColor: "gray",
+                  border: "1px solid #e6e6e6",
+                  borderRadius: 5,
+                  width: "50%",
+                  height: "50px",
+                }}
+                placeholder="JsonPath"
+              />
+              <input
+                onChange={(evt) =>
+                  setCustomField((prevState) => {
+                    const newState = [...prevState];
+                    newState[index].variable = evt.target.value;
+                    return newState;
+                  })
+                }
+                value={item.variable}
+                className="nodrag "
+                style={{
+                  outline: "none",
+                  padding: 5,
+                  outlineColor: "gray",
+                  border: "1px solid #e6e6e6",
+                  borderRadius: 5,
+                  width: "50%",
+                  height: "50px",
+                }}
+                placeholder="Custom Variable"
+              />
+              <select name="" id="" onChange={(e) => handleChange(e)}>
                 <option value="Array">Array</option>
-                  <option value="Text">Text</option>
-                  
-                </select>
-                <button onClick={() => handleDeleteCustomField(index)}>Delete</button>
-            
-              </div>
-            ))
-          }
+                <option value="Text">Text</option>
+              </select>
+              <button onClick={() => handleDeleteCustomField(index)}>
+                Delete
+              </button>
+            </div>
+          ))}
 
-
-          
-
-
-          
-          <button style={{
+          <button
+            style={{
               textAlign: "center",
               width: "100%",
               outline: "none",
@@ -776,14 +911,13 @@ const Modal = ({
               border: "none",
               borderRadius: 5,
               display: "block",
-              marginTop:"10px",
+              marginTop: "10px",
               marginBottom: 5,
             }}
             onClick={handleAddCustomField}
-            >
-              Add Custom Field
-            </button>
-
+          >
+            Add Custom Field
+          </button>
 
           <button
             onClick={HandleExtractData}
@@ -798,7 +932,7 @@ const Modal = ({
               border: "none",
               borderRadius: 5,
               display: "block",
-              marginTop:"10px",
+              marginTop: "10px",
               marginBottom: 5,
             }}
           >

@@ -43,12 +43,11 @@
 
 import React, { useState } from "react";
 import "./userProfile.css";
-import { AiFillCaretDown } from 'react-icons/ai';
+import { AiFillCaretDown } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 
 const UserProfile = () => {
-
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleInfo = () => {
@@ -59,28 +58,55 @@ const UserProfile = () => {
     <div className={`main__userprofile ${isOpen ? "open" : ""}`}>
       <div className="profile__card user__profile__image">
         <div className="profile__image">
-          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTA78Na63ws7B7EAWYgTr9BxhX_Z8oLa1nvOA&usqp=CAU" alt="User Profile" />
+          <img
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTA78Na63ws7B7EAWYgTr9BxhX_Z8oLa1nvOA&usqp=CAU"
+            alt="User Profile"
+          />
         </div>
         <h4>Fernando Faucho</h4>
         <p>CEO & Founder at Highly Inc</p>
       </div>
 
       <div className="profile__card">
-        <div className="card__header" onClick={() => navigate("/settings")}>
-          <h4>Flow Setting</h4>
+        <div className="card__header">
+          <h4>Home</h4>
         </div>
       </div>
 
       <div className="profile__card">
-        <div className="card__header" onClick={() => navigate("/importCustomers")}>
-          <h4>Import Customers</h4>
+        <div className="card__header">
+          <h4>Contacts</h4>
         </div>
       </div>
 
+      <div className="profile__card">
+        <div className="card__header" onClick={() => navigate("/settings")}>
+          <h4>Automation</h4>
+        </div>
+      </div>
 
+      <div className="profile__card">
+        <div className="card__header">
+          <h4>Live Chat</h4>
+        </div>
+      </div>
 
+      <div className="profile__card">
+        <div className="card__header">
+          <h4>Broadcasting</h4>
+        </div>
+      </div>
+
+      <div className="profile__card">
+        <div
+          className="card__header"
+          onClick={() => navigate("/importCustomers")}
+        >
+          <h4>Import Customers</h4>
+        </div>
+      </div>
     </div>
   );
-}
+};
 
 export default UserProfile;

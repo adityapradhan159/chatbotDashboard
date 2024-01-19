@@ -22,21 +22,19 @@ const ChatBody = ({setSelectedUserMessages,seletedUserMessages,sendMessage, AllC
         users={AllChats}
       />
 
-      {
-        showComponent == "chatContent" ? 
-        <ChatContent seletedUserMessages={seletedUserMessages} seletedUser={seletedUser} sendMessage={sendMessage} />
-
-        :
-        showComponent == "broadcast" ?
-
-        <Broadcast/>
-
-        :
+      {showComponent == "chatContent" ? (
+        <ChatContent
+          seletedUserMessages={seletedUserMessages}
+          seletedUser={seletedUser}
+          sendMessage={sendMessage}
+        />
+      ) : showComponent == "broadcast" ? (
+        <Broadcast />
+      ) : (
         <></>
-      }
-      
-      
-      <UserProfile />
+      )}
+
+      {/* <UserProfile /> */}
     </div>
   );
 };

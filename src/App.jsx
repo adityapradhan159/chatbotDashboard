@@ -2,15 +2,14 @@ import "./App.css";
 import Nav from "./components/nav/Nav";
 import ChatBody from "./components/chatBody/ChatBody";
 import { io } from "socket.io-client";
-import {BrowserRouter as Router, Routes, Route} from "react-router-dom"
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Provider } from "react-redux";
 import store from "./redux/store";
 import LoginRegistration from "./components/LoginRegistration/LoginRegistration";
-import 'reactflow/dist/style.css';
+import "reactflow/dist/style.css";
 import FlowSettings from "./Pages/FlowSettings/FlowSettings";
-
-
+import UserProfile from "./components/userProfile/UserProfile";
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
@@ -28,13 +27,12 @@ const firebaseConfig = {
   storageBucket: "chatbotdashboardv2.appspot.com",
   messagingSenderId: "1038335016642",
   appId: "1:1038335016642:web:6d4148261512c374f8c55b",
-  measurementId: "G-P58B5DZY7F"
+  measurementId: "G-P58B5DZY7F",
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
-
 
 function App() {
   const [messages, setMessages] = useState([]);
@@ -93,34 +91,36 @@ function App() {
   console.log("hello world :o");
 
   return (
-
     <Router>
       <Routes>
-        <Route path="/" element={<LoginRegistration/>}/>
-        <Route path="/settings" element={<FlowSettings/>}/>
-        <Route path="/importCustomers" element={<ImportCustomers/>}/>
-        <Route path="/dashboard" element={<div className="__main">
-        {messages &&
-          messages.map((itm, index) => {
-            return <div key={index}>{itm.body}</div>;
-          })}
-        <Nav />
-        <ChatBody
-          seletedUserMessages={seletedUserMessages}
-          setSelectedUserMessages={setSelectedUserMessages}
-          AllChats={AllChats}
-          setAllChats={setAllChats}
-          sendMessage={sendMessage}
-          seletedUser={seletedUser}
-          setSelectedUser={setSelectedUser}
-          FetchAllMessages={FetchAllMessages}
+        <Route path="/" element={<LoginRegistration />} />
+        <Route path="/settings" element={<FlowSettings />} />
+        <Route path="/importCustomers" element={<ImportCustomers />} />
+        <Route
+          path="/dashboard"
+          element={
+            <div className="__main">
+              {messages &&
+                messages.map((itm, index) => {
+                  return <div key={index}>{itm.body}</div>;
+                })}
+              {/* <Nav /> */}
+              <UserProfile />
+              <ChatBody
+                seletedUserMessages={seletedUserMessages}
+                setSelectedUserMessages={setSelectedUserMessages}
+                AllChats={AllChats}
+                setAllChats={setAllChats}
+                sendMessage={sendMessage}
+                seletedUser={seletedUser}
+                setSelectedUser={setSelectedUser}
+                FetchAllMessages={FetchAllMessages}
+              />
+            </div>
+          }
         />
-      </div>}/>
       </Routes>
     </Router>
-    
-      
-    
   );
 }
 

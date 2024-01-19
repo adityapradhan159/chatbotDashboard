@@ -785,13 +785,25 @@ const NodeType = ({ id, isConnectable, data }) => {
                   value={message.content}
                   className="nodrag list-btn"
                 />
-                <Handle
-                  style={{ top: "auto" }}
-                  type="source"
-                  position={Position.Right}
-                  id={`handle${message.id}`}
-                  isConnectable={isConnectable}
-                />
+
+
+                {
+                  data.name !== "User Input Node" &&
+                  <Handle
+                    style={{ top: "auto" }}
+                    type="source"
+                    position={Position.Right}
+                    id={`handle${message.id}`}
+                    isConnectable={isConnectable}
+                  />
+
+                }
+
+
+                
+
+
+
               </div>
             )}
           </div>
