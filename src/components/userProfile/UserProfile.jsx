@@ -45,6 +45,8 @@ import React, { useState } from "react";
 import "./userProfile.css";
 import { AiFillCaretDown } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setNavTab } from "../../redux/Features/Data";
 
 const UserProfile = () => {
   const navigate = useNavigate();
@@ -52,6 +54,12 @@ const UserProfile = () => {
 
   const toggleInfo = () => {
     setIsOpen(!isOpen);
+  };
+
+  const dispatch = useDispatch();
+
+  const handleSideNavTab = (id) => {
+    dispatch(setNavTab(id));
   };
 
   return (
@@ -68,31 +76,31 @@ const UserProfile = () => {
       </div>
 
       <div className="profile__card">
-        <div className="card__header">
+        <div className="card__header" onClick={() => handleSideNavTab(0)}>
           <h4>Home</h4>
         </div>
       </div>
 
       <div className="profile__card">
-        <div className="card__header">
+        <div className="card__header" onClick={() => handleSideNavTab(0)}>
           <h4>Contacts</h4>
         </div>
       </div>
 
       <div className="profile__card">
-        <div className="card__header" onClick={() => navigate("/settings")}>
+        <div className="card__header" onClick={() => handleSideNavTab(2)}>
           <h4>Automation</h4>
         </div>
       </div>
 
       <div className="profile__card">
-        <div className="card__header">
+        <div className="card__header" onClick={() => handleSideNavTab(0)}>
           <h4>Live Chat</h4>
         </div>
       </div>
 
       <div className="profile__card">
-        <div className="card__header">
+        <div className="card__header" onClick={() => handleSideNavTab(0)}>
           <h4>Broadcasting</h4>
         </div>
       </div>

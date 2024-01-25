@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  
-  users:[],
-  apiType:"get",
-  apiUrl: null
+  users: [],
+  apiType: "get",
+  apiUrl: null,
+  navTab: 0,
 };
 
 const StoredData = createSlice({
@@ -12,19 +12,24 @@ const StoredData = createSlice({
   initialState,
   reducers: {
     setUsers: (state, action) => {
-      state.users = action.payload
+      state.users = action.payload;
     },
 
     setApiType: (state, action) => {
-      state.apiType = action.payload
+      state.apiType = action.payload;
     },
 
     setApiUrl: (state, action) => {
-      state.apiType = action.payload
+      state.apiType = action.payload;
+    },
+
+    setNavTab: (state, action) => {
+      state.navTab = action.payload;
     },
   },
 });
 
-export const { setUsers,setApiType,setApiUrl} = StoredData.actions;
+export const { setUsers, setApiType, setApiUrl, setNavTab } =
+  StoredData.actions;
 
 export default StoredData.reducer;

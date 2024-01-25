@@ -2,9 +2,14 @@ import "./App.css";
 import Nav from "./components/nav/Nav";
 import ChatBody from "./components/chatBody/ChatBody";
 import { io } from "socket.io-client";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useNavigate,
+} from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Provider } from "react-redux";
+import { Provider, useSelector } from "react-redux";
 import store from "./redux/store";
 import LoginRegistration from "./components/LoginRegistration/LoginRegistration";
 import "reactflow/dist/style.css";
@@ -40,6 +45,8 @@ function App() {
   // var socket = io("https://tudoorg.glitch.me");
   const [seletedUser, setSelectedUser] = useState(null);
   const [seletedUserMessages, setSelectedUserMessages] = useState(null);
+
+  const { navTab } = useSelector((state) => state.StoredData);
 
   const sendMessage = () => {
     // socket.emit("sendmessage", { chatId, messageContent });
@@ -88,7 +95,16 @@ function App() {
   // setMessages((prevMessages) => [...prevMessages, data]);
   // });
 
-  console.log("hello world :o");
+  const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
+
+  const handleFlowModal = () => {
+    setShowModal(!showModal);
+  };
+
+  const handleSaveFlow = () => {
+    setShowModal(!showModal);
+  };
 
   return (
     <Router>
@@ -106,16 +122,45 @@ function App() {
                 })}
               {/* <Nav /> */}
               <UserProfile />
-              <ChatBody
-                seletedUserMessages={seletedUserMessages}
-                setSelectedUserMessages={setSelectedUserMessages}
-                AllChats={AllChats}
-                setAllChats={setAllChats}
-                sendMessage={sendMessage}
-                seletedUser={seletedUser}
-                setSelectedUser={setSelectedUser}
-                FetchAllMessages={FetchAllMessages}
-              />
+
+              <div className="sideTabBody">
+                {navTab == 0 ? (
+                  <ChatBody
+                    seletedUserMessages={seletedUserMessages}
+                    setSelectedUserMessages={setSelectedUserMessages}
+                    AllChats={AllChats}
+                    setAllChats={setAllChats}
+                    sendMessage={sendMessage}
+                    seletedUser={seletedUser}
+                    setSelectedUser={setSelectedUser}
+                    FetchAllMessages={FetchAllMessages}
+                  />
+                ) : navTab == 1 ? (
+                  <></>
+                ) : navTab == 2 ? (
+                  <div className="automationDiv">
+                    <button onClick={handleFlowModal}>Create a flow</button>
+
+                    {showModal == true && (
+                      <div className="flowModal">
+                        <label htmlFor="">Please enter flow name.</label>
+                        <input type="text" />
+                        <button onClick={handleSaveFlow}>Save</button>
+                      </div>
+                    )}
+
+                    <div
+                      className="flowList"
+                      onClick={() => navigate("/settings")}
+                    >
+                      <div className="flowStatus"></div>
+                      <div className="flowName">Flow 1</div>
+                    </div>
+                  </div>
+                ) : (
+                  <></>
+                )}
+              </div>
             </div>
           }
         />

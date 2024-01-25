@@ -80,3 +80,76 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #3b5bfe;
 }
+
+
+.sideTabBody{
+  width: 70%;
+}
+
+.automationDiv{
+  width: 100%;
+  position: relative;
+  z-index: 10;
+}
+
+
+.flowModal{
+  width: 300px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  padding: 20px;
+  gap: 10px;
+  margin-top: 20px;
+  /* position: absolute;
+  top: 0%;
+  left: 0px;
+  border-color: white;
+  z-index: 100; */
+}
+
+.flowModal button{
+  background-color: #4664ff;
+  color: #fff;
+  border: none;
+  outline: none;
+}
+
+.flowModal label{
+  font-weight: 600;
+}
+
+.flowModal input{
+  padding: 12px;
+  outline: none;
+  border: 1px solid rgb(218, 215, 215);
+}
+
+.flowList{
+  width: 100%;
+  /* height: 60px; */
+  background-color: rgb(245, 245, 245);
+  margin-top: 30px;
+  border-radius: 6px;
+}
+
+.flowList{
+  padding: 20px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  cursor: pointer;
+}
+
+.flowList .flowStatus{
+  width: 10px;
+  height: 10px;
+  background-color: green;
+  border-radius: 50%;
+}
+
+.flowList .flowName{
+  font-weight: 600;
+  font-size: 14px;
+}
