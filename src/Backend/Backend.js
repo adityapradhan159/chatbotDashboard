@@ -48,6 +48,8 @@ let destinationArray;
 let showMessage = true;
 let dynamicListMsg = [];
 let studioTimings;
+
+
 // Connect to MongoDB using Mongoose
 mongoose.connect(uri, {
   useNewUrlParser: true,

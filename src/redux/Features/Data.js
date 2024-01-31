@@ -5,6 +5,7 @@ const initialState = {
   apiType: "get",
   apiUrl: null,
   navTab: 0,
+  flowData: [],
 };
 
 const StoredData = createSlice({
@@ -26,10 +27,13 @@ const StoredData = createSlice({
     setNavTab: (state, action) => {
       state.navTab = action.payload;
     },
+    setFlowData: (state, action) => {
+      state.flowData = action.payload;
+    },
   },
 });
 
-export const { setUsers, setApiType, setApiUrl, setNavTab } =
+export const { setUsers, setApiType, setApiUrl, setNavTab, setFlowData } =
   StoredData.actions;
 
 export default StoredData.reducer;
