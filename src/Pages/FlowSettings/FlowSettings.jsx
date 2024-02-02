@@ -46,22 +46,22 @@ const FlowSettings = () => {
       );
 
       // Filter nodes with flowId=flowId-ay
-      const filteredNodes = flow.nodes.filter(
-        (node) => node.data.flowId === localStorage.getItem("flowId")
-      );
+      // const filteredNodes = flow.nodes.filter(
+      //   (node) => node.data.flowId === localStorage.getItem("flowId")
+      // );
 
-      // Filter edges with flowId=flowId-ay
-      const filteredEdges = flow.edges.filter(
-        (edge) => edge.data.flowId === localStorage.getItem("flowId")
-      );
+      // // Filter edges with flowId=flowId-ay
+      // const filteredEdges = flow.edges.filter(
+      //   (edge) => edge.data.flowId === localStorage.getItem("flowId")
+      // );
 
-      const filteredData = {
-        nodes: filteredNodes,
-        edges: filteredEdges,
-        viewport: flow.viewport, // Keep the original viewport
-      };
-      console.log(flow, "This is flow");
-      console.log(filteredData, "This is flow2");
+      // const filteredData = {
+      //   nodes: filteredNodes,
+      //   edges: filteredEdges,
+      //   viewport: flow.viewport, // Keep the original viewport
+      // };
+      // console.log(flow, "This is flow");
+      // console.log(filteredData, "This is flow2");
 
       axios
         .put(
@@ -196,26 +196,26 @@ const FlowSettings = () => {
   //   [setEdges]
   // );
 
-  // const onConnect = useCallback(
-  //   (params) => setEdges((eds) => addEdge(params, eds)),
-  //   [setEdges]
-  // );
-
   const onConnect = useCallback(
-    (params) => {
-      // Create a new edge with custom data
-      const newEdge = {
-        id: `edge-${params.source}-${params.target}`,
-        source: params.source,
-        target: params.target,
-        data: { flowId: localStorage.getItem("flowId") }, // Add custom data to the edge
-      };
-
-      // Update the edges state with the new edge
-      setEdges((edges) => addEdge(newEdge, edges));
-    },
+    (params) => setEdges((eds) => addEdge(params, eds)),
     [setEdges]
   );
+
+  // const onConnect = useCallback(
+  //   (params) => {
+  //     // Create a new edge with custom data
+  //     const newEdge = {
+  //       id: `edge-${params.source}-${params.target}`,
+  //       source: params.source,
+  //       target: params.target,
+  //       data: { flowId: localStorage.getItem("flowId") }, // Add custom data to the edge
+  //     };
+
+  //     // Update the edges state with the new edge
+  //     setEdges((edges) => addEdge(newEdge, edges));
+  //   },
+  //   [setEdges]
+  // );
 
   return (
     <ReactFlowProvider>

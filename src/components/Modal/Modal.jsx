@@ -337,12 +337,10 @@ const Modal = ({
   const [apiResponse, setApiResponse] = useState({});
   const [JsonPath, setJsonPath] = useState("");
   const [CustomVariable, setCustomVariable] = useState("");
-  const [customField,setCustomField] = useState([
-    {"variable":"", "jsonPath":""}
-  ])
+  const [customField, setCustomField] = useState(data?.customFields);
   const [apiMethod, setApiMethod] = useState("get");
 
-  const [keyValue, setKeyValue] = useState([]);
+  const [keyValue, setKeyValue] = useState(data?.postParams);
   const [headersValue, setHeadersValue] = useState([]);
   const [headerObj, setHeaderObj] = useState({});
   const [bodyType, setBodyType] = useState("json");
@@ -352,6 +350,10 @@ const Modal = ({
   // console.log(data,"admwke")
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    setApiMethod(data?.apiType);
+  }, []);
 
   const [Feilds, setFeilds] = useState([]);
   const HandleResponse = () => {
@@ -689,27 +691,28 @@ const Modal = ({
             </div>
           )}
 
-          {keyValue.map((item, index) => (
-            <div key={index}>
-              <input
-                type="text"
-                value={item.key}
-                onChange={(e) =>
-                  handleKeyValueChange(index, "key", e.target.value)
-                }
-              />
-              <input
-                type="text"
-                value={item.value}
-                onChange={(e) =>
-                  handleKeyValueChange(index, "value", e.target.value)
-                }
-              />
-              <Button onClick={() => handleRemoveKeyValue(index)}>
-                Remove
-              </Button>
-            </div>
-          ))}
+          {keyValue &&
+            keyValue.map((item, index) => (
+              <div key={index}>
+                <input
+                  type="text"
+                  value={item.key}
+                  onChange={(e) =>
+                    handleKeyValueChange(index, "key", e.target.value)
+                  }
+                />
+                <input
+                  type="text"
+                  value={item.value}
+                  onChange={(e) =>
+                    handleKeyValueChange(index, "value", e.target.value)
+                  }
+                />
+                <Button onClick={() => handleRemoveKeyValue(index)}>
+                  Remove
+                </Button>
+              </div>
+            ))}
 
           {apiMethod == "post" && responseVal.length > 0 ? (
             responseVal.map((item, index) => (
@@ -846,59 +849,60 @@ const Modal = ({
             <pre>{JSON.stringify(apiResponse, null, 2)}</pre>
           </div>
 
-          {customField.map((item, index) => (
-            <div className="list-container  extract-data">
-              <input
-                onChange={(evt) =>
-                  setCustomField((prevState) => {
-                    const newState = [...prevState];
-                    newState[index].jsonPath = evt.target.value;
-                    return newState;
-                  })
-                }
-                value={item.jsonPath}
-                className="nodrag "
-                style={{
-                  outline: "none",
-                  padding: 5,
-                  outlineColor: "gray",
-                  border: "1px solid #e6e6e6",
-                  borderRadius: 5,
-                  width: "50%",
-                  height: "50px",
-                }}
-                placeholder="JsonPath"
-              />
-              <input
-                onChange={(evt) =>
-                  setCustomField((prevState) => {
-                    const newState = [...prevState];
-                    newState[index].variable = evt.target.value;
-                    return newState;
-                  })
-                }
-                value={item.variable}
-                className="nodrag "
-                style={{
-                  outline: "none",
-                  padding: 5,
-                  outlineColor: "gray",
-                  border: "1px solid #e6e6e6",
-                  borderRadius: 5,
-                  width: "50%",
-                  height: "50px",
-                }}
-                placeholder="Custom Variable"
-              />
-              <select name="" id="" onChange={(e) => handleChange(e)}>
-                <option value="Array">Array</option>
-                <option value="Text">Text</option>
-              </select>
-              <button onClick={() => handleDeleteCustomField(index)}>
-                Delete
-              </button>
-            </div>
-          ))}
+          {customField &&
+            customField.map((item, index) => (
+              <div className="list-container  extract-data">
+                <input
+                  onChange={(evt) =>
+                    setCustomField((prevState) => {
+                      const newState = [...prevState];
+                      newState[index].jsonPath = evt.target.value;
+                      return newState;
+                    })
+                  }
+                  value={item.jsonPath}
+                  className="nodrag "
+                  style={{
+                    outline: "none",
+                    padding: 5,
+                    outlineColor: "gray",
+                    border: "1px solid #e6e6e6",
+                    borderRadius: 5,
+                    width: "50%",
+                    height: "50px",
+                  }}
+                  placeholder="JsonPath"
+                />
+                <input
+                  onChange={(evt) =>
+                    setCustomField((prevState) => {
+                      const newState = [...prevState];
+                      newState[index].variable = evt.target.value;
+                      return newState;
+                    })
+                  }
+                  value={item.variable}
+                  className="nodrag "
+                  style={{
+                    outline: "none",
+                    padding: 5,
+                    outlineColor: "gray",
+                    border: "1px solid #e6e6e6",
+                    borderRadius: 5,
+                    width: "50%",
+                    height: "50px",
+                  }}
+                  placeholder="Custom Variable"
+                />
+                <select name="" id="" onChange={(e) => handleChange(e)}>
+                  <option value="Array">Array</option>
+                  <option value="Text">Text</option>
+                </select>
+                <button onClick={() => handleDeleteCustomField(index)}>
+                  Delete
+                </button>
+              </div>
+            ))}
 
           <button
             style={{
