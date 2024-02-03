@@ -7,14 +7,14 @@ const app = express().use(body_parser.json()); // creates express http server
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const {JSONPath} = require('jsonpath-plus');
+const { JSONPath } = require("jsonpath-plus");
 const { check, validationResult } = require("express-validator");
-const Cryptr = require('cryptr');
-const cryptr = new Cryptr('myTotallySecretKey');
+const Cryptr = require("cryptr");
+const cryptr = new Cryptr("myTotallySecretKey");
 var http = require("http");
 // const { Server } = require("socket.io");
 const server = http.createServer(app);
-const nodemailer = require('nodemailer');
+const nodemailer = require("nodemailer");
 app.use(express.json());
 app.use(cors());
 
@@ -49,7 +49,7 @@ let {
 
 let destinationArray;
 let showMessage = true;
-let dynamicListMsg = []
+let dynamicListMsg = [];
 let studioTimings;
 // Connect to MongoDB using Mongoose
 mongoose.connect(uri, {
@@ -84,21 +84,20 @@ db.once("open", () => {
   const Customers = db.collection("Customers");
   const ChatFlows = db.collection("ChatFlows");
   const FlowList = db.collection("FlowList");
-  
-  
-  
-  
-  
 
   // Define a schema for the recipients collection
   const recipientSchema = new mongoose.Schema({
     email: String,
     opened: Boolean,
-    lastseen: Date
+    lastseen: Date,
   });
 
   // Create a model based on the schema
-  const Recipients = mongoose.model('Recipients', recipientSchema, 'recipients');
+  const Recipients = mongoose.model(
+    "Recipients",
+    recipientSchema,
+    "recipients"
+  );
 
   // Nodemailer transporter setup
   const transporter = nodemailer.createTransport({
@@ -110,22 +109,16 @@ db.once("open", () => {
     },
   });
 
-  app.post('/sendmail', async (req, res) => {
-    
-    
-    
-    
+  app.post("/sendmail", async (req, res) => {
     try {
       const { Recipient, MessageBody, Subject } = req.body;
-      
-      const Server = `https://tudoorg.glitch.me/recipients/${Recipient}`
+
+      const Server = `https://tudoorg.glitch.me/recipients/${Recipient}`;
 
       const htmlBody = `<p>${MessageBody}</p><img src="${Server}" style="display:none">`;
-      
-      
 
       const mailOptions = {
-        from:"pradhantestay@gmail.com",
+        from: "pradhantestay@gmail.com",
         to: Recipient,
         subject: Subject,
         html: htmlBody,
@@ -135,42 +128,50 @@ db.once("open", () => {
 
       // Insert recipient into MongoDB using Mongoose
       // Create new recipient document using Mongoose
-      const newRecipient = new Recipients({ email: Recipient, opened: false, lastseen: null });
+      const newRecipient = new Recipients({
+        email: Recipient,
+        opened: false,
+        lastseen: null,
+      });
       await newRecipient.save();
 
-
-      console.log('Email sent and recipient inserted into MongoDB');
-      res.send({ status: 'success' });
+      console.log("Email sent and recipient inserted into MongoDB");
+      res.send({ status: "success" });
     } catch (error) {
-      console.error('An error occurred:', error);
-      res.status(500).send({ error: 'An error occurred while sending the email or inserting the recipient' });
+      console.error("An error occurred:", error);
+      res
+        .status(500)
+        .send({
+          error:
+            "An error occurred while sending the email or inserting the recipient",
+        });
     }
   });
 
-  app.get('/recipients/:recipient', async (req, res) => {
+  app.get("/recipients/:recipient", async (req, res) => {
     try {
       const recipientEmail = req.params.recipient;
-      const date_ob = new Date().toISOString().slice(0, 19).replace('T', ' ');
+      const date_ob = new Date().toISOString().slice(0, 19).replace("T", " ");
 
       // Update recipient in MongoDB using Mongoose
-      const result = await Recipients.updateOne({ email: recipientEmail }, { $set: { opened: true, lastseen: date_ob } });
+      const result = await Recipients.updateOne(
+        { email: recipientEmail },
+        { $set: { opened: true, lastseen: date_ob } }
+      );
 
-      console.log('Recipient updated in MongoDB');
-      res.send({ status: 'success', time: date_ob });
+      console.log("Recipient updated in MongoDB");
+      res.send({ status: "success", time: date_ob });
     } catch (error) {
-      console.error('An error occurred:', error);
-      res.status(500).send({ error: 'An error occurred while updating the recipient in the database' });
+      console.error("An error occurred:", error);
+      res
+        .status(500)
+        .send({
+          error:
+            "An error occurred while updating the recipient in the database",
+        });
     }
   });
-  
-  
-  
-  
-  
-  
-  
-  
-  
+
   app.post("/api/chat", async (req, res) => {
     try {
       // Assuming your request body contains sender and content
@@ -183,24 +184,21 @@ db.once("open", () => {
       res.status(500).json({ error: "Failed to save the message." });
     }
   });
-  
-  
-  
-    app.post("/api/chatFlow", async (req, res) => {
-      try {
-        // Assuming your request body contains sender and content
-        const data = req.body;
-        // console.log(JSON.parse(data) ,"data")
-        // Create a new chat message document
-        const result = await ChatFlows.insertOne(req.body);
 
-        res.status(200).json(result); //rsnd with the saved message
-      } catch (error) {
-        res.status(500).json({ error: "Failed to save the message." });
-      }
-    });
-  
-   
+  app.post("/api/chatFlow", async (req, res) => {
+    try {
+      // Assuming your request body contains sender and content
+      const data = req.body;
+      // console.log(JSON.parse(data) ,"data")
+      // Create a new chat message document
+      const result = await ChatFlows.insertOne(req.body);
+
+      res.status(200).json(result); //rsnd with the saved message
+    } catch (error) {
+      res.status(500).json({ error: "Failed to save the message." });
+    }
+  });
+
   app.put("/api/chatFlow/", async (req, res) => {
     try {
       const { whatsAppBusinessAccountId } = req.query;
@@ -235,12 +233,7 @@ db.once("open", () => {
         .json({ error: "Failed to update or create the message." });
     }
   });
-  
-  
-  
 
-  
-  
   app.post("/api/flowList/", async (req, res) => {
     try {
       // Assuming your request body contains sender and content
@@ -249,7 +242,7 @@ db.once("open", () => {
       const data = req.body;
       // console.log(data);
 
-       const existingCustomer = await FlowList.findOne({
+      const existingCustomer = await FlowList.findOne({
         whatsAppBusinessAccountId: whatsAppBusinessAccountId,
       });
 
@@ -257,21 +250,20 @@ db.once("open", () => {
         // If the customer doesn't exist, insert a new record
         // const result = await FlowList.insertOne(req.body);
         // res.status(200).json(result); // Respond with the saved message
-        
+
         const result = await FlowList.insertOne({
           whatsAppBusinessAccountId: whatsAppBusinessAccountId,
           ...data,
         });
         return res.status(200).json(result); // Respond with the saved message
-        
       } else {
-        console.log("Else========")
+        console.log("Else========");
         // If the customer exists, update the existing record
-         const result = await FlowList.insertOne({
+        const result = await FlowList.insertOne({
           whatsAppBusinessAccountId: whatsAppBusinessAccountId,
           ...data,
         });
-        
+
         res.status(200).json(result); // Respond with the updated message
       }
 
@@ -282,8 +274,7 @@ db.once("open", () => {
       res.status(500).json({ error: "Failed to save the message." });
     }
   });
-  
-  
+
   app.get("/api/flowList", async (req, res) => {
     try {
       // Assuming your request body contains sender and content
@@ -298,10 +289,6 @@ db.once("open", () => {
       res.status(500).json({ error: "Failed to save the message." });
     }
   });
-  
-  
-  
-  
 
   app.post("/api/customer", async (req, res) => {
     try {
@@ -348,8 +335,7 @@ db.once("open", () => {
       res.status(500).json({ error: "Failed to save the message." });
     }
   });
-  
-  
+
   app.get("/api/specificcustomer", async (req, res) => {
     try {
       // Assuming your request body contains sender and content
@@ -365,8 +351,7 @@ db.once("open", () => {
       res.status(500).json({ error: "Failed to save the message." });
     }
   });
-  
-  
+
   app.get("/api/admin", async (req, res) => {
     try {
       // Assuming your request body contains sender and content
@@ -384,8 +369,7 @@ db.once("open", () => {
       res.status(500).json({ error: "Failed to save the message." });
     }
   });
-  
-  
+
   app.get("/api/chat", async (req, res) => {
     try {
       // Assuming your request body contains sender and content
@@ -402,10 +386,7 @@ db.once("open", () => {
       res.status(500).json({ error: "Failed to save the message." });
     }
   });
-  
-  
-  
-  
+
   app.get("/api/chatFlow", async (req, res) => {
     try {
       // Assuming your request body contains sender and content
@@ -526,9 +507,7 @@ db.once("open", () => {
         .json({ success: false, message: "internal_server_error" });
     }
   });
-  
-  
-  
+
   app.post("/Customer-bulk-update", async (req, res, next) => {
     try {
       const jokes = req.body;
@@ -574,33 +553,8 @@ db.once("open", () => {
         .json({ success: false, message: "internal_server_error" });
     }
   });
-  
-  
-  
-
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
 
   app.post("/webhook", (req, res) => {
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     // Parse the request body from the POST
     let body = req.body;
     const whatsAppBusinessAccountId = req.body.entry[0].id;
@@ -612,9 +566,8 @@ db.once("open", () => {
 
     // info on WhatsApp text message payload: https://developers.facebook.com/docs/whatsapp/cloud-api/webhooks/payload-examples#text-messages
     if (req.body.object) {
-      
-      console.log(req.body,"Body")
-      console.log(req.body.entry[0].messaging,"Body")
+      console.log(req.body, "Body");
+      console.log(req.body.entry[0].messaging, "Body");
       if (
         req.body.entry &&
         req.body.entry[0].changes &&
@@ -627,21 +580,23 @@ db.once("open", () => {
         let from = req.body.entry[0].changes[0].value.messages[0].from; // extract the phone number from the webhook payload
         let user = req.body.entry[0].changes[0].value.contacts[0].profile.name;
 
-//         console.log(
-//           "REceived messages",
-//           req.body.entry[0].changes[0].value.messages[0]
-//         );
+        //         console.log(
+        //           "REceived messages",
+        //           req.body.entry[0].changes[0].value.messages[0]
+        //         );
 
         let msg_body;
-        let globalVar = {email:""};
+        let globalVar = { email: "" };
 
         // console.log(user);
 
         let selectedOption;
         let selectedOptionId;
-        
-        
-        console.log(req.body.entry[0].changes[0].value.messages[0],"9845093486043956840998650")
+
+        console.log(
+          req.body.entry[0].changes[0].value.messages[0],
+          "9845093486043956840998650"
+        );
 
         if (req.body.entry[0].changes[0].value.messages[0].interactive) {
           // msg_body = req.body.entry[0].changes[0].value.messages[0].interactive.list_reply.title
@@ -672,12 +627,13 @@ db.once("open", () => {
         } else {
           msg_body = req.body.entry[0].changes[0].value.messages[0].text.body;
         }
-        console.log(msg_body, "This is the response message from user..............");
+        console.log(
+          msg_body,
+          "This is the response message from user.............."
+        );
         console.log("selectedOptionId", selectedOptionId);
         console.log("selectedOption", selectedOption);
-        
-        
-        
+
         // io.emit("message", {
         //   message:
         //     msg_body ||
@@ -686,9 +642,7 @@ db.once("open", () => {
         //   name: user,
         //   number: from,
         // });
-        
-        
-        
+
         axios
           .get(
             `https://tudoorg.glitch.me/api/customer?whatsAppBusinessAccountId=${whatsAppBusinessAccountId}`
@@ -918,6 +872,26 @@ db.once("open", () => {
                           const headers = filteredNode[0].data.headerObj;
                           const bodyType = filteredNode[0].data.bodyType;
 
+                          if (
+                            filteredNode[0].data.customFields &&
+                            filteredNode[0].data.customFields.length > 0
+                          ) {
+                            var key =
+                              filteredNode[0].data.customFields[0].variable;
+
+                            Customers.update(
+                              { number: from }, // Specify the query criteria to find the document with the phone number
+                              {
+                                $addToSet: {
+                                  customField: {
+                                    [key]: "",
+                                    nodeId: filteredNode[0].id,
+                                  }, // Add an object to the customField array with a dynamic key, only if it doesn't already exist
+                                },
+                              }
+                            );
+                          }
+
                           axios
                             .get(
                               `https://tudoorg.glitch.me/api/customer?whatsAppBusinessAccountId=${whatsAppBusinessAccountId}`
@@ -1015,7 +989,12 @@ db.once("open", () => {
                                             "Data Json Path......."
                                           );
 
-                                          var a = variable;
+                                          var varia = variable;
+
+                                          console.log(
+                                            varia,
+                                            "This is variable============="
+                                          );
 
                                           //   Customers.update(
                                           //    { "number": from }, // Specify the query criteria to find the document with the phone number
@@ -1026,12 +1005,12 @@ db.once("open", () => {
                                           //    }
                                           // )
 
-                                          Customers.update(
+                                          Customers.updateOne(
                                             {
                                               number: from,
                                               customField: {
                                                 $elemMatch: {
-                                                  [a]: { $exists: true },
+                                                  [varia]: { $exists: true },
                                                 },
                                               },
                                             }, // Check if an object with key [a] exists
@@ -1046,11 +1025,25 @@ db.once("open", () => {
                                             {
                                               arrayFilters: [
                                                 {
-                                                  "elem.[a]": { $exists: true },
+                                                  "elem.$[varia]": {
+                                                    $exists: true,
+                                                  },
                                                 },
                                               ],
-                                            } // Specify the array filter to match the element with key [a]
+                                            },
+                                            (err, result) => {
+                                              if (err) {
+                                                console.error("Error:", err);
+                                              } else {
+                                                console.log(
+                                                  "Update result:",
+                                                  result
+                                                );
+                                              }
+                                            }
                                           );
+
+                                          console.log("After updateOne");
                                         }
                                       );
                                     };
@@ -2509,7 +2502,7 @@ db.once("open", () => {
                       );
                     });
 
-                    // console.log("filteredEdges", filteredEdges);
+                    console.log("filteredEdges", filteredEdges);
 
                     const filteredNodeEdges = res.data[0].nodes.filter((el) => {
                       return filteredEdges[0]?.target == el.id;
@@ -2520,7 +2513,7 @@ db.once("open", () => {
                       filteredNodeEdges
                     );
 
-                    // console.log("FilteredEdges",filteredEdges)
+                    console.log("FilteredEdges", filteredEdges);
 
                     if (filteredNodeEdges[0].data.name == "Webhook Node") {
                       if (filteredNodeEdges[0].data.apiType == "post") {
@@ -3973,7 +3966,7 @@ db.once("open", () => {
                               to: from,
                               type: "text",
                               text: {
-                                body: filteredNode[0].data.text[0].content,
+                                body: filteredNodeEdges[0].data.text[0].content,
                               },
                             },
                             headers: {
@@ -3981,8 +3974,8 @@ db.once("open", () => {
                             },
                           })
                             .then((res) => {
-                              var a = filteredNode[0].data.text[1].content;
-                              const nodeId = filteredNode[0].id;
+                              var a = filteredNodeEdges[0].data.text[1].content;
+                              const nodeId = filteredNodeEdges[0].id;
 
                               Customers.update(
                                 { number: from }, // Specify the query criteria to find the document with the phone number
@@ -3990,7 +3983,7 @@ db.once("open", () => {
                                   $addToSet: {
                                     customField: {
                                       [a]: "",
-                                      nodeId: filteredNode[0].id,
+                                      nodeId: filteredNodeEdges[0].id,
                                     }, // Add an object to the customField array with a dynamic key, only if it doesn't already exist
                                   },
                                 }
@@ -4002,7 +3995,8 @@ db.once("open", () => {
                                   whatsAppBusinessAccountId:
                                     whatsAppBusinessAccountId,
                                   chatId: from,
-                                  message: filteredNode[0].data.text[0].content,
+                                  message:
+                                    filteredNodeEdges[0].data.text[0].content,
                                   timestamp: timestamp.toISOString(), // Convert the Date object to an ISO string
                                 })
                                 .then((response) => {
@@ -4633,7 +4627,5 @@ db.once("open", () => {
     }
   });
 });
-
-
 
 // $.data[?(@.docId == 'emirates')].*.[*].time
