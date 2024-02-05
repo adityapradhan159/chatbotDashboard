@@ -31,6 +31,11 @@ const Dashboard = ({
   //     flowData
   //   );
   const [flowName, setFlowName] = useState("");
+  const [formData, setFormData] = useState({
+    email: "",
+    subject: "",
+    body: "",
+  });
 
   const handleFlowModal = () => {
     setShowModal(!showModal);
@@ -99,6 +104,39 @@ const Dashboard = ({
     localStorage.setItem("flowId", id);
   };
 
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    // console.log("formData", formData.email);
+    const jsonData = {
+      Recipient: formData.email,
+      MessageBody: formData.body,
+      Subject: formData.subject,
+    };
+    try {
+      const response = await axios.post(
+        `https://tudoorg.glitch.me/sendmail`,
+        jsonData
+      );
+      console.log("response", response); // Handle the response as needed
+      setFormData({
+        email: "",
+        subject: "",
+        body: "",
+      });
+
+      alert("Email send succesfully");
+    } catch (error) {
+      console.error("Error sending email:", error);
+    }
+  };
+
   return (
     <div className="__main">
       {messages &&
@@ -121,7 +159,44 @@ const Dashboard = ({
             FetchAllMessages={FetchAllMessages}
           />
         ) : navTab == 1 ? (
-          <></>
+          <>
+            <h2>Send Email:</h2>
+            <form className="contact-form" onSubmit={handleSubmit}>
+              <label>
+                Email:
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                />
+              </label>
+              <br />
+              <label>
+                Subject:
+                <input
+                  type="text"
+                  name="subject"
+                  value={formData.subject}
+                  onChange={handleChange}
+                  required
+                />
+              </label>
+              <br />
+              <label>
+                Body:
+                <textarea
+                  name="body"
+                  value={formData.body}
+                  onChange={handleChange}
+                  required
+                />
+              </label>
+              <br />
+              <button type="submit">Send Email</button>
+            </form>
+          </>
         ) : navTab == 2 ? (
           <div className="automationDiv">
             <button onClick={handleFlowModal}>Create a flow</button>

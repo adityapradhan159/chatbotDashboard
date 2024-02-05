@@ -85,7 +85,8 @@ const ChatContent = ({ seletedUser, seletedUserMessages }) => {
           </div>
         </div>
       </div>
-      <div className="content__body"  style={{height:"100vh"}}>
+
+      <div className="content__body" style={{ height: "100vh" }}>
         {seletedUserMessages?.map((itm, index) => {
           return (
             <div className="chat__items" key={index}>
@@ -101,6 +102,7 @@ const ChatContent = ({ seletedUser, seletedUserMessages }) => {
           );
         })}
       </div>
+
       <div className="content__footer">
         <div className="sendNewMessage">
           <button className="addFiles">
@@ -122,9 +124,6 @@ const ChatContent = ({ seletedUser, seletedUserMessages }) => {
           </button>
         </div>
       </div>
-
-
-      
     </div>
   );
 };

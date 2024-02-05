@@ -113,6 +113,16 @@ const UserProfile = () => {
           <h4>Import Customers</h4>
         </div>
       </div>
+
+      <div className="profile__card">
+        <div
+          className="card__header"
+          onClick={() => handleSideNavTab(1)}
+          // onClick={() => navigate("/importCustomers")}
+        >
+          <h4>Send Email</h4>
+        </div>
+      </div>
     </div>
   );
 };

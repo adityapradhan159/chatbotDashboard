@@ -27,6 +27,8 @@
 .content__body {
   max-height: calc(100vh - calc(100vh / 2));
   overflow: auto;
+  background-image: url("https://i.pinimg.com/736x/8c/98/99/8c98994518b575bfd8c949e91d20548b.jpg");
+  /* background-image: url("https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png") */
 }
 .chat__item {
   display: flex;
@@ -71,7 +73,7 @@
   min-width: 215px;
 }
 .chat__item__content .chat__meta {
-  justify-content: space-between;
+  justify-content: flex-end;
   display: flex;
   margin-top: 10px;
 }
@@ -142,4 +144,15 @@
 #sendMsgBtn {
   background-color: #3b5bfe;
   color: #fff;
+}
+
+
+.chat__item__content__admin{
+  background-color: #D9FDD3;
+  color:black
+}
+
+.chat__item__content__user{
+  background-color: #d1d1d1;
+  color:black
 }
