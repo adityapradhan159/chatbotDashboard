@@ -116,7 +116,7 @@ const ChatList = ({
       <div className="chatlist__items">
         {allChatUsers &&
           allChatUsers?.map((item, index) => {
-            console.log(item, "item");
+            console.log(item, "itemUserData");
             return (
               <ChatListItems
                 name={item.name}

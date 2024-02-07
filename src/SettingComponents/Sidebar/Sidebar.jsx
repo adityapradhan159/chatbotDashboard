@@ -8,14 +8,18 @@ const Sidebar = ({ addNode, onSave,addHttpsNode,addUserInputNode }) => {
 
   return (
     <div className="Sidebar">
-
-      <span onClick={()=>navigate(-1)}>Go Back</span>
+      <span onClick={() => navigate(-1)}>Go Back</span>
 
       <button onClick={addNode}>Add Node</button>
-      <button onClick={addHttpsNode} style={{marginTop:"20px"}}>Add https Node</button>
-      <button onClick={addUserInputNode} style={{marginTop:"20px"}}>Add User Input Node</button>
-      <button style={{ marginTop: "10px" }} onClick={onSave}>Save You Flow</button>
-      
+      <button onClick={addHttpsNode} style={{ marginTop: "20px" }}>
+        Add https Node
+      </button>
+      <button onClick={addUserInputNode} style={{ marginTop: "20px" }}>
+        Add User Input Node
+      </button>
+      <button style={{ marginTop: "10px" }} onClick={onSave}>
+        Save Your Flow
+      </button>
     </div>
   );
 };

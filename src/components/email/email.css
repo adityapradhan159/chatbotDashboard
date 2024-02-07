@@ -1,0 +1,55 @@
+/* styles.css */
+.email {
+    display: flex;
+  }
+  
+  .email-list {
+    width: 100%;
+    /* border-right: 1px solid #ccc; */
+    padding: 20px;
+  }
+  
+  .compose-button {
+    cursor: pointer;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    margin-bottom: 10px;
+  }
+  
+  .compose-email-form {
+    width: 400px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .close-button {
+    cursor: pointer;
+    float: right;
+    background: transparent;
+    border: none;
+  }
+  
+  input,
+  textarea,
+  button {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  
+  button[type='submit'] {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  button[type='submit']:hover {
+    background-color: #0056b3;
+  }
+  

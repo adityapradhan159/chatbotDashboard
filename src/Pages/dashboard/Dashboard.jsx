@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import UserProfile from "../../components/userProfile/UserProfile";
+import UserTable from "../../components/userTable/UserTable";
 import ChatBody from "../../components/chatBody/ChatBody";
+import EmailList from "../../components/email/EmailList";
+import ComposeEmailForm from "../../components/email/ComposeEmailForm";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setFlowData } from "../../redux/Features/Data";
@@ -31,11 +34,11 @@ const Dashboard = ({
   //     flowData
   //   );
   const [flowName, setFlowName] = useState("");
-  const [formData, setFormData] = useState({
-    email: "",
-    subject: "",
-    body: "",
-  });
+  // const [formData, setFormData] = useState({
+  //   email: "",
+  //   subject: "",
+  //   body: "",
+  // });
 
   const handleFlowModal = () => {
     setShowModal(!showModal);
@@ -104,37 +107,53 @@ const Dashboard = ({
     localStorage.setItem("flowId", id);
   };
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+  // const handleChange = (e) => {
+  //   setFormData({
+  //     ...formData,
+  //     [e.target.name]: e.target.value,
+  //   });
+  // };
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   // console.log("formData", formData.email);
+  //   const jsonData = {
+  //     Recipient: formData.email,
+  //     MessageBody: formData.body,
+  //     Subject: formData.subject,
+  //   };
+  //   try {
+  //     const response = await axios.post(
+  //       `https://tudoorg.glitch.me/sendmail`,
+  //       jsonData
+  //     );
+  //     console.log("response", response); // Handle the response as needed
+  //     setFormData({
+  //       email: "",
+  //       subject: "",
+  //       body: "",
+  //     });
+
+  //     alert("Email send succesfully");
+  //   } catch (error) {
+  //     console.error("Error sending email:", error);
+  //   }
+  // };
+
+  const [emails, setEmails] = useState([]);
+  const [showComposeForm, setShowComposeForm] = useState(false);
+
+  const handleComposeClick = () => {
+    setShowComposeForm(true);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    // console.log("formData", formData.email);
-    const jsonData = {
-      Recipient: formData.email,
-      MessageBody: formData.body,
-      Subject: formData.subject,
-    };
-    try {
-      const response = await axios.post(
-        `https://tudoorg.glitch.me/sendmail`,
-        jsonData
-      );
-      console.log("response", response); // Handle the response as needed
-      setFormData({
-        email: "",
-        subject: "",
-        body: "",
-      });
+  const handleCloseComposeForm = () => {
+    setShowComposeForm(false);
+  };
 
-      alert("Email send succesfully");
-    } catch (error) {
-      console.error("Error sending email:", error);
-    }
+  const handleSendEmail = (email) => {
+    setEmails([...emails, email]);
+    setShowComposeForm(false);
   };
 
   return (
@@ -160,8 +179,18 @@ const Dashboard = ({
           />
         ) : navTab == 1 ? (
           <>
-            <h2>Send Email:</h2>
-            <form className="contact-form" onSubmit={handleSubmit}>
+            <h2>Email:</h2>
+
+            <div className="email">
+              <EmailList emails={emails} onComposeClick={handleComposeClick} />
+              {showComposeForm && (
+                <ComposeEmailForm
+                  onClose={handleCloseComposeForm}
+                  onSubmit={handleSendEmail}
+                />
+              )}
+            </div>
+            {/* <form className="contact-form" onSubmit={handleSubmit}>
               <label>
                 Email:
                 <input
@@ -195,7 +224,7 @@ const Dashboard = ({
               </label>
               <br />
               <button type="submit">Send Email</button>
-            </form>
+            </form> */}
           </>
         ) : navTab == 2 ? (
           <div className="automationDiv">
@@ -230,6 +259,11 @@ const Dashboard = ({
                 })}
             </div>
           </div>
+        ) : navTab == 3 ? (
+          <>
+            <h2>Contacts</h2>
+            <UserTable />
+          </>
         ) : (
           <></>
         )}

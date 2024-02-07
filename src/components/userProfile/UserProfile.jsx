@@ -82,7 +82,7 @@ const UserProfile = () => {
       </div>
 
       <div className="profile__card">
-        <div className="card__header" onClick={() => handleSideNavTab(0)}>
+        <div className="card__header" onClick={() => handleSideNavTab(3)}>
           <h4>Contacts</h4>
         </div>
       </div>
